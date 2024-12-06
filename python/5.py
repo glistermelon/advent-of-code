@@ -2,7 +2,7 @@ rules = []
 updates = []
 
 rules_parsed = False
-for ln in open('inputs/5.txt'):
+for ln in open('../inputs/5.txt'):
     if ln == '\n':
         rules_parsed = True
     elif not rules_parsed:

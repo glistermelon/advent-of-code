@@ -1,6 +1,6 @@
 # Part 1
 
-lines = [ln.strip() for ln in open('inputs/4.txt').readlines()]
+lines = [ln.strip() for ln in open('../inputs/4.txt').readlines()]
 
 if len(lines) != len(lines[0]): exit()
 

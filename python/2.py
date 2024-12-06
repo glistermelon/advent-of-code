@@ -1,7 +1,7 @@
 # Part 1
 
 safe = 0
-for report in open('inputs/2.txt'):
+for report in open('../inputs/2.txt'):
     report = [int(n) for n in report.split()]
     report = [report[i] - report[i - 1] for i in range(1, len(report))]
     if min(report) < 0 and max(report) > 0: continue
@@ -21,7 +21,7 @@ def check(report : list[int]):
     return True
 
 safe = 0
-for report in open('inputs/2.txt'):
+for report in open('../inputs/2.txt'):
     report = [int(n) for n in report.split()]
     if check(report): safe += 1
     else:

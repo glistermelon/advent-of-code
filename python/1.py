@@ -1,6 +1,6 @@
 left = []
 right = []
-for ln in open('inputs/1.txt'):
+for ln in open('../inputs/1.txt'):
     ln = ln.split()
     left.append(int(ln[0]))
     right.append(int(ln[1]))
