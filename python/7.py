@@ -24,15 +24,12 @@ for ln in open('../inputs/7.txt'):
     nums = [int(n) for n in ln[1].strip().split()]
     num_opps = len(nums) - 1
     for part in range(2):
-        worked = False
         for pattern in range((3 if part else 2)**(num_opps)):
             pattern = base3(pattern) if part else bin(pattern)[2:]
             pattern = ('0' * (num_opps - len(pattern))) + pattern
             if solve(nums, pattern) == target:
-                worked = True
+                outputs[part] += target
                 break
-        if worked:
-            outputs[part] += target
 
 for output in outputs:
     print(output)
