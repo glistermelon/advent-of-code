@@ -4,40 +4,42 @@ use util::read_lines;
 
 use std::vec::Vec;
 
-use convert_base::Convert;
+struct Solver {
+    allow_concat : bool
+}
 
-fn solve(nums : &Vec<u64>, opps : &mut Vec<u8>) -> u64 {
-    nums.iter().copied().reduce(
-        |n1, n2| match opps.pop().unwrap() {
-            0 => n1 + n2,
-            1 => n1 * n2,
-            2 => (n1.to_string() + &n2.to_string()).parse::<u64>().unwrap(),
-            x => panic!("yikes {}", x)
+impl Solver {
+    fn solve(&mut self, nums : &[u64], targ : u64) -> bool {
+        let n = nums[0];
+        if nums.len() == 1 { return n == targ; }
+        let next_slice = &nums[1..];
+        if self.allow_concat {
+            let digits_p10 = (10 as u64).pow(if n != 1 { ((n + 1) as f64).log10().ceil() as u32 } else { 1 });
+            if targ % digits_p10 == n && self.solve(next_slice, targ / digits_p10) { return true; }
         }
-    ).unwrap()
+        if targ % n == 0 && self.solve(next_slice, targ / n) { return true; }
+        if n < targ && self.solve(next_slice, targ - n) { return true; }
+        false
+    }
 }
 
 fn main() {
     let mut outputs : [u64; 2] = [0, 0];
+    let mut solver = Solver { allow_concat: false };
     for ln in read_lines(input_path(7)).unwrap() {
         let colon_i = ln.find(':').unwrap();
         let targ = ln[0..colon_i].parse::<u64>().unwrap();
-        let nums = ln[colon_i + 2..].split(' ').map(|n| n.parse::<u64>()).flatten().collect::<Vec<u64>>();
-        let num_opps = (nums.len() - 1) as u32;
-        for part in 0..2 {
-            for pattern in 0..((if part == 0 {2} else {3}) as i32).pow(num_opps) {
-                let mut opps = pattern.to_string().chars().rev().map(|c| c.to_digit(10).unwrap() as u8).collect::<Vec<u8>>();
-                opps = Convert::new(10, if part == 0 {2} else {3}).convert::<u8, u8>(&opps);
-                let missing_opps = num_opps as usize - opps.len();
-                if missing_opps != 0 {
-                    opps.splice(opps.len()..opps.len(), std::iter::repeat(0).take(missing_opps));
-                }
-                if solve(&nums, &mut opps) == targ {
-                    outputs[part] += targ;
-                    break;
-                }
+        let nums = ln[colon_i + 2..].split_whitespace().map(|n| n.parse::<u64>()).flatten().rev().collect::<Vec<u64>>();
+        if solver.solve(&nums, targ) {
+            outputs[0] += targ;
+        }
+        else {
+            solver.allow_concat = true;
+            if solver.solve(&nums, targ) {
+                outputs[1] += targ;
             }
+            solver.allow_concat = false;
         }
     }
-    println!("{}\n{}", outputs[0], outputs[1]);
+    println!("{}\n{}", outputs[0], outputs[0] + outputs[1]);
 }
