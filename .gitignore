@@ -1,2 +1,4 @@
 rust/target/
 python/__pycache__/
+java/.idea/
+java/target/
