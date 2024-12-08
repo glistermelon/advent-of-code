@@ -1,7 +1,7 @@
 nums = None
 part2 = False
 
-from math import log, ceil, log2, floor
+from math import ceil, log2
 
 log2_10 = log2(10)
 
