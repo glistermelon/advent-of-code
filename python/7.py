@@ -1,35 +1,33 @@
-def base3(n):
-    out = ''
-    while n:
-        n, rem = divmod(n, 3)
-        out = str(rem) + out
-    return out
+nums = None
+part2 = False
 
-def solve(nums, opps):
-    nums = list(nums)
-    while len(opps):
-        if opps[0] == '0':
-            nums[0] += nums.pop(1)
-        elif opps[0] == '1':
-            nums[0] *= nums.pop(1)
-        elif opps[0] == '2':
-            nums[0] = int(str(nums[0]) + str(nums.pop(1)))
-        opps = opps[1:]
-    return nums[0]
+from math import log, ceil, log2, floor
 
-outputs = [0, 0]
+log2_10 = log2(10)
+
+def solve(idx : int, targ : int):
+    if idx == 0: return nums[0] == targ
+    if part2:
+        unconcat, preconcat = divmod(targ, 10**ceil(0.0000001 + log2(nums[idx]) / log2_10))
+        if preconcat == nums[idx] and solve(idx - 1, unconcat): return True
+    div, mod = divmod(targ, nums[idx])
+    if mod == 0 and solve(idx - 1, div): return True
+    if nums[idx] < targ and solve(idx - 1, targ - nums[idx]): return True
+    return False
+
+output1 = 0
+output2 = 0
 for ln in open('../inputs/7.txt'):
     ln = ln.split(':')
-    target = int(ln[0])
+    targ = int(ln[0])
     nums = [int(n) for n in ln[1].strip().split()]
-    num_opps = len(nums) - 1
-    for part in range(2):
-        for pattern in range((3 if part else 2)**(num_opps)):
-            pattern = base3(pattern) if part else bin(pattern)[2:]
-            pattern = ('0' * (num_opps - len(pattern))) + pattern
-            if solve(nums, pattern) == target:
-                outputs[part] += target
-                break
+    if solve(len(nums) - 1, targ):
+        output1 += targ
+    else:
+        part2 = True
+        if solve(len(nums) - 1, targ):
+            output2 += targ
+        part2 = False
 
-for output in outputs:
-    print(output)
+print(output1)
+print(output1 + output2)
