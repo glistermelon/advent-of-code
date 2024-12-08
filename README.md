@@ -1,4 +1,4 @@
-## Notes on inclusion if inputs
+## Notes on inclusion of inputs
 
 Okay; I know it might be controversial, but I'm going to include my inputs regardless of Eric's request not to. Here is my reasoning:
 
