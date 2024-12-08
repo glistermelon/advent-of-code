@@ -13,7 +13,7 @@ Okay; I know it might be controversial, but I'm going to include my inputs regar
    The problematic case is if someone tries to create a large-scale copy, especially with the intent to make money off of it. However, in that case,
    it should really be a copyright of the problems themselves that is preventative, not the puzzle inputs.
 
-4. Being even broader, I think it's perfectly fine to include any part of AoC in any project with lack of malicious intent. I can think of a lot of projects built upon AoC that do not affect Eric whatsoever.
+4. Being even broader, I think it's perfectly fine to include any part of AoC in any project with lack of malicious intent. I can think of a lot of theoretical projects built upon AoC that would not affect Eric whatsoever.
    So long as credit is provided, it isn't a problem to me.
 
    * *Sure, it isn't a problem for you, but this isn't your work at hand, and it IS a problem for the developer.* I operate on my own beliefs, not others'.
