@@ -4,7 +4,7 @@ board = [[int(c) for c in ln] for ln in open('../inputs/10.txt').read().splitlin
 
 part2 = False
 
-def search(nodes : list[(int, int)] = []):
+def search(nodes : list[(int, int)]):
     y, x = nodes[-1]
     if board[y][x] == 9:
         return 1 if part2 else set(((y, x),))
