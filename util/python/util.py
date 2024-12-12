@@ -1,3 +1,5 @@
+import functools
+
 # dunno if i will ever need this
 def dim(arr, iterable_types = (list, tuple)):
     d = 0
@@ -40,3 +42,6 @@ def find_with_key(indexable, key):
         if key(v):
             return i
     return -1
+
+def prod(iterable):
+    return functools.reduce(lambda a, b : a * b, iterable)
