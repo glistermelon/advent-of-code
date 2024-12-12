@@ -45,3 +45,14 @@ def find_with_key(indexable, key):
 
 def prod(iterable):
     return functools.reduce(lambda a, b : a * b, iterable)
+
+def windows(iterable, size : int):
+    iterator = iter(iterable)
+    window = []
+    while len(window) != size:
+        window.append(next(iterator))
+    yield tuple(window) if type(iterable) is not str else ''.join(window)
+    for item in iterator:
+        window.pop(0)
+        window.append(item)
+        yield tuple(window) if type(iterable) is not str else ''.join(window)
