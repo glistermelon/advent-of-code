@@ -34,3 +34,9 @@ def piecewise(a, b, opp, out_type = None):
     if len(a) != len(b):
         raise RuntimeError('piecewise(a, b) requires len(a) == len(b)')
     return out_type(opp(a[i], b[i]) for i in range(len(a)))
+
+def find_with_key(indexable, key):
+    for i, v in enumerate(indexable):
+        if key(v):
+            return i
+    return -1
