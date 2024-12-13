@@ -49,8 +49,11 @@ def prod(iterable):
 def windows(iterable, size : int):
     iterator = iter(iterable)
     window = []
-    while len(window) != size:
-        window.append(next(iterator))
+    try:
+        while len(window) != size:
+            window.append(next(iterator))
+    except StopIteration:
+        return iter(())
     yield tuple(window) if type(iterable) is not str else ''.join(window)
     for item in iterator:
         window.pop(0)
