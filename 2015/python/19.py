@@ -22,4 +22,22 @@ def get_new_mols(mol : str, reverse = False):
     return new_mols
 print(len(get_new_mols(target_mol)))
 
-# Part 2 todo
+# Part 2
+
+prev_len = None
+steps = 0
+while True:
+    for repl in replacements:
+        repl = tuple(reversed(repl))
+        for i, w in enumerate(windows(target_mol, len(repl[0]))):
+            if w != repl[0]: continue
+            target_mol = ''.join(target_mol[:i] + repl[1] + target_mol[i + len(w):])
+            steps += 1
+            break
+    if prev_len == len(target_mol): break
+    prev_len = len(target_mol)
+
+if target_mol != 'e':
+    print('Part 2 failed')
+else:
+    print(steps)
