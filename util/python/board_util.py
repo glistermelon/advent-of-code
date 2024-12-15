@@ -5,8 +5,8 @@ class Board:
 
     def __init__(self, arr_2d):
         self.arr = arr_2d
-        self.w = len(arr_2d)
-        self.h = len(arr_2d[0])
+        self.w = len(arr_2d[0])
+        self.h = len(arr_2d)
     
     def __getitem__(self, p):
         return self.at(p)
@@ -101,6 +101,14 @@ class Dir(Enum):
         if dy < 0: return Dir.up
         if dx > 0: return Dir.right
         if dx < 0: return Dir.left
+        return None
+    
+    @staticmethod
+    def from_arrow_char(c):
+        if c == '^': return Dir.up
+        elif c == 'v': return Dir.down
+        elif c == '>': return Dir.right
+        elif c == '<': return Dir.left
         return None
 
 def adj_points(p, include_dir = False):
