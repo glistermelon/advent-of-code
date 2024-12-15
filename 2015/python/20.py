@@ -36,7 +36,7 @@ for part1 in True, False:
         global target_presents
         global lowest_h
 
-        f = prime_factors[-1] if len(prime_factors) else 2
+        f = prime_factors[-1] if prime_factors else 2
 
         while True:
 
@@ -56,7 +56,7 @@ for part1 in True, False:
                 else:
                     prime_factors.append(f)
                     s = f + 1
-                    if len(sums):
+                    if sums:
                         s *= sums[-1]
             else:
                 prime_factors.append(f)
