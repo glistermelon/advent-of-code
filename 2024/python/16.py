@@ -79,7 +79,7 @@ def solve(start_vertex : Vertex, end_vertex : Vertex):
         for d in dir, dir.turn_left(), dir.turn_right():
             if vtx.has_adj(d):
                 a = vtx.get_adj(d)
-                s = score + taxi_dist(vtx.pos, a.pos)
+                s = score + dist_taxi(vtx.pos, a.pos)
                 if d != dir:
                     s += 1000
                 if a not in scores or s < scores[a]:
@@ -95,7 +95,7 @@ def solve(start_vertex : Vertex, end_vertex : Vertex):
         for a in vtx.adj:
             if a is None or a not in visited:
                 continue
-            s = taxi_dist(vtx.pos, a.pos)
+            s = dist_taxi(vtx.pos, a.pos)
 
             if directions[a] != dir_between_vertices(a, vtx):
                 s += 1000
