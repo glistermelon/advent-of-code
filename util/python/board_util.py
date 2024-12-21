@@ -111,10 +111,11 @@ class Dir(Enum):
         elif c == '<': return Dir.left
         return None
 
-def adj_points(p, include_dir = False):
-    for dx in -1, 0, 1:
-        for dy in -1, 0, 1:
-            if dx != 0 and dy != 0: continue
+def adj_points(p, *, radius=1, inclusive=True, include_dir = False):
+    for dx in range(-radius, radius + 1):
+        abs_dy = radius - abs(dx)
+        for dy in (range(-abs_dy, abs_dy + 1) if inclusive else set((-abs_dy, abs_dy))):
+            if dx == 0 and dy == 0: continue
             if include_dir:
                 yield (p[0] + dy, p[1] + dx), Dir.from_delta_pos(dy, dx)
             else:
@@ -154,3 +155,6 @@ def sides(region):
             if (a not in region and dy.advance(p) in region and dx.advance(p) in region) or (dy.advance(p) not in region and not dx.advance(p) in region):
                 out += 1
     return out
+
+def dist_taxi(p1 : tuple[int, int], p2 : tuple[int, int]):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
