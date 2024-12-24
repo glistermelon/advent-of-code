@@ -1,4 +1,4 @@
-from util import prod
+from utils import prod
 import itertools
 
 packages = list(map(int, open('../inputs/24.txt').read().splitlines(keepends=False)))

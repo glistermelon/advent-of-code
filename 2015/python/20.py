@@ -1,4 +1,4 @@
-from util import prod
+from utils import prod
 from sympy import isprime
 from itertools import combinations
 import functools

@@ -1,4 +1,4 @@
-from util import find_nd
+from utils import find_nd
 
 board = [[int(c) for c in ln] for ln in open('../inputs/10.txt').read().splitlines(keepends=False)]
 

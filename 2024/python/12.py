@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 from enum import Enum
 from board_util import *
 

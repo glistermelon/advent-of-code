@@ -1,4 +1,4 @@
-from util import windows
+from utils import windows
 
 def nice1(string : str):
     if sum(string.count(c) for c in 'aeiou') < 3: return False

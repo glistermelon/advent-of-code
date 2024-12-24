@@ -1,5 +1,5 @@
 from board_util import *
-from util import *
+from utils import *
 
 board = Board(open('../inputs/20.txt').read().splitlines(keepends=False))
 

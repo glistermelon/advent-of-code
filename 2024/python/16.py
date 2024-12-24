@@ -1,5 +1,5 @@
 from board_util import *
-from util import *
+from utils import *
 import sys
 
 sys.setrecursionlimit(10000) # Just for setting up nodes because I'm lazy

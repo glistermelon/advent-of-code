@@ -10,5 +10,5 @@ for item_name in os.listdir('../..'):
         continue
     cp_to = f'../../{item_name}/python'
     if os.path.exists(cp_to):
-        shutil.copy('util.py', cp_to)
+        shutil.copy('utils.py', cp_to)
         shutil.copy('board_util.py', cp_to)

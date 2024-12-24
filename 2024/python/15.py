@@ -1,5 +1,5 @@
 from board_util import *
-from util import *
+from utils import *
 
 input_data = open('../inputs/15.txt').read()
 input_data_split = input_data.find('\n\n')

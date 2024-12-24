@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 from board_util import *
 
 W = 101

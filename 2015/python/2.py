@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 
 output1 = 0
 output2 = 0

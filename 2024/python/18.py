@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 from board_util import *
 
 falls = [tuple(map(int, ln.split(','))) for ln in open('../inputs/18.txt').read().splitlines(keepends=False)]

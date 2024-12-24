@@ -1,5 +1,5 @@
 import base36
-from util import windows, deltas
+from utils import windows, deltas
 
 def unsafe(pw : str):
 

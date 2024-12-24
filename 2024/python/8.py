@@ -1,4 +1,4 @@
-from util import find_nd, piecewise
+from utils import find_nd, piecewise
 from itertools import combinations
 
 board_str = open('../inputs/8.txt').read()

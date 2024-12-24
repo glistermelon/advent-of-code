@@ -1,4 +1,4 @@
-from util import windows
+from utils import windows
 
 lines = open('../inputs/19.txt').read().splitlines(keepends=False)
 target_mol = lines[-1]

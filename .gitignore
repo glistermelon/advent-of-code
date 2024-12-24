@@ -1,7 +1,7 @@
 */rust/target/
 */python/__pycache__/
 util/python/__pycache__/*
-*/python/util.py
+*/python/utils.py
 */python/board_util.py
 !/util/python/*
 */java/.idea/

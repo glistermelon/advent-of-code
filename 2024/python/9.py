@@ -1,4 +1,4 @@
-from util import find_with_key
+from utils import find_with_key
 
 def get_disk(include_zero):
     return [[i // 2, int(c)] if i % 2 == 0 else int(c) for i, c in enumerate(open('../inputs/9.txt').read()) if include_zero or c != '0']

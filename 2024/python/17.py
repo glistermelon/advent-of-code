@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 
 # This is hardcoded to my input due to a combination of laziness and lack of other inputs to test
 

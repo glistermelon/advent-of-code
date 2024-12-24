@@ -1,4 +1,4 @@
-from util import *
+from utils import *
 
 stones = [int(s) for s in open('../inputs/11.txt').read().split()]
 stones = { s : stones.count(s) for s in stones }
