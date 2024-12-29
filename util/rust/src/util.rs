@@ -8,6 +8,8 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::io::Result;
 use core::iter::Flatten;
+use ndarray::Dimension;
+use ndarray::Array;
 
 pub mod board;
 
@@ -109,4 +111,13 @@ where It: Iterator<Item = T>, T: Debug + Clone
         }
         Some(self.buf.clone())
     }
+}
+
+pub fn find_nd<A, D>(array: &Array<A, D>, target: A) -> Vec<D::Pattern>
+where A: PartialEq, D: Dimension
+{
+    array
+        .indexed_iter()
+        .filter_map(|(index, value)| if *value == target { Some(index) } else { None })
+        .collect()
 }

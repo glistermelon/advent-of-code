@@ -9,6 +9,9 @@ edition = "2021"
 utils = { path = "../../util/rust" }
 ndarray = "0.16.1"
 num = "0.4.3"
+petgraph = "0.6.5"
+itertools = "0.13.0"
+serde_json = "1.0.134"
 
 [[bin]]
 name = "day_1"
@@ -53,3 +56,11 @@ path = "src/10.rs"
 [[bin]]
 name = "day_11"
 path = "src/11.rs"
+
+[[bin]]
+name = "day_12"
+path = "src/12.rs"
+
+[[bin]]
+name = "day_13"
+path = "src/13.rs"

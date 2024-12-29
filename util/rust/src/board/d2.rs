@@ -1,5 +1,13 @@
-use num::PrimInt;
-use std::fmt::Display;
+use num::{PrimInt, Signed};
+use std::fmt::{Debug, Display};
+
+use crate::board::nd;
+
+pub fn in_bounds<T>(bounds : (T, T), p : (T, T)) -> bool
+where T: PrimInt
+{
+    nd::in_bounds([bounds.0, bounds.1], [p.0, p.1])
+}
 
 #[derive(Copy, Clone, Debug)]
 pub enum Dir2D {
@@ -99,14 +107,20 @@ where T: PrimInt
     (p1.0 - p0.0, p1.1 - p0.1)
 }
 
+pub fn dist_taxi<T>(p0 : (T, T), p1 : (T, T)) -> (T, T)
+where T: PrimInt + Signed
+{
+    ((p1.0 - p0.0).abs(), (p1.1 - p0.1).abs())
+}
+
 // The following aren't iterators because it would be a giant pain in the ass to make them iterators
 // Hopefully I'll never pass a huge radius to any of them...
 
 pub fn adj_points<T>(point : (T, T), radius : T, inclusive : bool) -> Vec<(T, T)>
-where i64: From<T>, T: From<i64>
+where i64: TryFrom<T>, T: TryFrom<i64>, <i64 as TryFrom<T>>::Error: Debug, <T as TryFrom<i64>>::Error: Debug
 {
-    let point_i64 = (i64::from(point.0), i64::from(point.1));
-    let radius_i64 = i64::from(radius);
+    let point_i64 = (i64::try_from(point.0).unwrap(), i64::try_from(point.1).unwrap());
+    let radius_i64 = i64::try_from(radius).unwrap();
     let mut points = vec![];
     for dx in (-radius_i64)..(radius_i64 + 1) {
         let abs_dy = radius_i64 - dx.abs();
@@ -121,13 +135,12 @@ where i64: From<T>, T: From<i64>
             }
         }
         for dy in iter_over.into_iter() {
-            if dx == 0 && dy == 0 {
-                continue;
+            if dx != 0 || dy != 0 {
+                points.push((
+                    T::try_from(point_i64.0 + dy).unwrap(),
+                    T::try_from(point_i64.1 + dx).unwrap()
+                ));
             }
-            points.push((
-                T::from(point_i64.0 + dy),
-                T::from(point_i64.1 + dx)
-            ));
         }
     }
     points
