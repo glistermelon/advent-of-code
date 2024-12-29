@@ -1,6 +1,5 @@
-mod util;
-use util::input_path;
-use util::read_lines;
+use utils::input_path;
+use utils::read_lines;
 
 use std::vec::Vec;
 
@@ -26,7 +25,7 @@ impl Solver {
 fn main() {
     let mut outputs : [u64; 2] = [0, 0];
     let mut solver = Solver { allow_concat: false };
-    for ln in read_lines(input_path(7)).unwrap() {
+    for ln in read_lines(input_path(2024, 7)).unwrap() {
         let colon_i = ln.find(':').unwrap();
         let targ = ln[0..colon_i].parse::<u64>().unwrap();
         let nums = ln[colon_i + 2..].split_whitespace().map(|n| n.parse::<u64>()).flatten().rev().collect::<Vec<u64>>();

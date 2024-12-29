@@ -1,6 +1,5 @@
-mod util;
-use util::input_path;
-use util::read_lines;
+use utils::input_path;
+use utils::read_lines;
 
 use std::vec::Vec;
 use std::cmp::Ordering;
@@ -30,7 +29,7 @@ fn main() {
     let mut rules_parsed : bool = false;
     let mut output1 : u32 = 0;
     let mut output2 : u32 = 0;
-    for ln in read_lines(input_path(5)).unwrap() {
+    for ln in read_lines(input_path(2024, 5)).unwrap() {
         if ln.is_empty() {
             rules_parsed = true;
         }

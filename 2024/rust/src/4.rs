@@ -1,12 +1,11 @@
-mod util;
-use util::input_path;
+use utils::input_path;
 use std::fs;
 
 use std::vec::Vec;
 
 fn main() {
 
-    let data_str = fs::read_to_string(input_path(4)).unwrap();
+    let data_str = fs::read_to_string(input_path(2024, 4)).unwrap();
     let data = data_str.split("\n").map(|ln| ln.trim()).collect::<Vec<&str>>();
 
     let mut output : u32 = 0;

@@ -1,5 +1,5 @@
 [package]
-name = "advent-of-code-2024-rs"
+name = "advent-of-code-2022-rs"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,9 +7,8 @@ edition = "2021"
 
 [dependencies]
 utils = { path = "../../util/rust" }
-regex = "1.11.1"
-convert-base = "1.1.2"
 ndarray = "0.16.1"
+num = "0.4.3"
 
 [[bin]]
 name = "day_1"
@@ -32,9 +31,25 @@ name = "day_5"
 path = "src/5.rs"
 
 [[bin]]
+name = "day_6"
+path = "src/6.rs"
+
+[[bin]]
 name = "day_7"
 path = "src/7.rs"
 
 [[bin]]
 name = "day_8"
 path = "src/8.rs"
+
+[[bin]]
+name = "day_9"
+path = "src/9.rs"
+
+[[bin]]
+name = "day_10"
+path = "src/10.rs"
+
+[[bin]]
+name = "day_11"
+path = "src/11.rs"

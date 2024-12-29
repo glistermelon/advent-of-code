@@ -1,6 +1,5 @@
-mod util;
-use util::input_path;
-use util::read_lines;
+use utils::input_path;
+use utils::read_lines;
 
 use std::collections::HashMap;
 use std::vec::Vec;
@@ -10,7 +9,7 @@ fn main() {
     let mut list1 : Vec<u32> = Vec::new();
     let mut list2 : Vec<u32> = Vec::new();
 
-    for ln in read_lines(input_path(1)).unwrap() {
+    for ln in read_lines(input_path(2024, 1)).unwrap() {
         let mut split = ln.split_whitespace();
         list1.push(split.next().unwrap().parse::<u32>().unwrap());
         list2.push(split.next().unwrap().parse::<u32>().unwrap());

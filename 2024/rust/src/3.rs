@@ -1,5 +1,4 @@
-mod util;
-use util::input_path;
+use utils::input_path;
 use std::fs;
 
 use regex::Regex;
@@ -16,7 +15,7 @@ fn product_sum(data : &String) -> u64 {
 }
 
 fn main() {
-    let mut data = fs::read_to_string(input_path(3)).unwrap();
+    let mut data = fs::read_to_string(input_path(2024, 3)).unwrap();
     println!("{}", product_sum(&data));
     while let Some(i1) = data.find("don't()") {
         let i2 = data[i1 + 2..].find("do()").map_or(data.len(),|i| i + i1 + 2);

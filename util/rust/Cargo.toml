@@ -1,0 +1,12 @@
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/util.rs"
+
+[dependencies]
+ndarray = "0.16.1"
+num = "0.4.3"
+array-init = "2.1.0"

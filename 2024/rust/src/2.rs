@@ -1,6 +1,5 @@
-mod util;
-use util::input_path;
-use util::read_lines;
+use utils::input_path;
+use utils::read_lines;
 
 use std::vec::Vec;
 
@@ -22,7 +21,7 @@ fn check(list : &Vec<i32>) -> bool {
 fn main() {
     let mut output1 : u32 = 0;
     let mut output2 : u32 = 0;
-    for ln in read_lines(input_path(2)).unwrap() {
+    for ln in read_lines(input_path(2024, 2)).unwrap() {
         let mut list = ln.split(" ").map(|x| x.parse::<i32>()).flatten().collect::<Vec<i32>>();
         if check(&list) {
             output1 += 1;
