@@ -113,6 +113,12 @@ where T: PrimInt + Signed
     ((p1.0 - p0.0).abs(), (p1.1 - p0.1).abs())
 }
 
+pub fn dist_taxi_abs<T>(p0 : (T, T), p1 : (T, T)) -> T
+where T: PrimInt + Signed
+{
+    (p1.0 - p0.0).abs() + (p1.1 - p0.1).abs()
+}
+
 // The following aren't iterators because it would be a giant pain in the ass to make them iterators
 // Hopefully I'll never pass a huge radius to any of them...
 
