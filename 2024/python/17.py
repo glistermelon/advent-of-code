@@ -42,8 +42,7 @@ def evaluate(init_a : int, first_only : bool = False):
 
 sols = set()
 sols.add((0, 0))
-for shift, triad in enumerate(instructions[::-1]):
-    shift *= 3
+for triad in instructions[::-1]:
     postc_b = triad ^ 1
     next_sols = set()
     for c in range(8):
