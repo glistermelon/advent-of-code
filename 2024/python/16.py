@@ -99,9 +99,7 @@ def solve(start_vertex : Vertex, end_vertex : Vertex):
 
             if directions[a] != dir_between_vertices(a, vtx):
                 s += 1000
-            if dir_between_vertices(a, vtx) != dir:
-                s += 1000
-            if directions[vtx] != dir:
+            if directions[vtx] != dir and dir_between_vertices(a, vtx) == dir:
                 s -= 1000
 
             if scores[a] + s == scores[vtx]:
