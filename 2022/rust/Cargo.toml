@@ -77,3 +77,23 @@ path = "src/15.rs"
 [[bin]]
 name = "day_16"
 path = "src/16.rs"
+
+[[bin]]
+name = "day_17"
+path = "src/17.rs"
+
+[[bin]]
+name = "day_18"
+path = "src/18.rs"
+
+[[bin]]
+name = "day_19"
+path = "src/19.rs"
+
+[[bin]]
+name = "day_20"
+path = "src/20.rs"
+
+[[bin]]
+name = "day_21"
+path = "src/21.rs"
