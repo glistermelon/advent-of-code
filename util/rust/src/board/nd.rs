@@ -1,22 +1,65 @@
-use ndarray::{prelude::*, Data, NdIndex};
+use ndarray::{prelude::*, NdIndex, StrideShape};
 use num::PrimInt;
-use std::ops::{Index, IndexMut};
+use std::{fmt::Debug, ops::{Index, IndexMut}};
 
+#[derive(Clone, Debug)]
 pub struct Board<T, D>
-where T: Data, D: Dimension
+where D: Dimension
 {
     pub arr : Array<T, D>
 }
 
 impl<T, D> Board<T, D>
-where T: Data, D: Dimension
+where D: Dimension, T : Debug
 {
-    
+
+    pub fn from_shape_vec<Sh>(shape : Sh, vec : Vec<T>) -> Self
+    where Sh: Into<StrideShape<D>> + Debug
+    {
+        Board {
+            arr: Array::from_shape_vec(shape, vec).unwrap()
+        }
+    }
+
+    pub fn get<I, const N : usize>(&self, i: [I; N]) -> Option<&T>
+    where
+        D: Dimension,
+        [usize; N]: NdIndex<D>,
+        usize: TryFrom<I>,
+        I: PrimInt + Copy {
+        let mut j = [0; N];
+        for k in 0..N {
+            let n = usize::try_from(i[k]);
+            if n.is_err() {
+                return None;
+            }
+            j[k] = n.ok().unwrap();
+        }
+        self.arr.get(j)
+    }
+
+    pub fn get_mut<I, const N : usize>(&mut self, i: [I; N]) -> Option<&mut T>
+    where
+        D: Dimension,
+        [usize; N]: NdIndex<D>,
+        usize: TryFrom<I>,
+        I: PrimInt + Copy {
+        let mut j = [0; N];
+        for k in 0..N {
+            let n = usize::try_from(i[k]);
+            if n.is_err() {
+                return None;
+            }
+            j[k] = n.ok().unwrap();
+        }
+        self.arr.get_mut(j)
+    }
+
 }
 
 impl<T, D, const N : usize> Index<[usize; N]> for Board<T, D>
 where
-    T: Data, D: Dimension,
+    D: Dimension,
     [usize; N]: NdIndex<D>
 {
     type Output = T;
@@ -27,7 +70,7 @@ where
 
 impl<T, D, const N : usize> IndexMut<[usize; N]> for Board<T, D>
 where
-    T: Data, D: Dimension,
+    D: Dimension,
     [usize; N]: NdIndex<D>
 {
     fn index_mut(&mut self, i: [usize; N]) -> &mut T {

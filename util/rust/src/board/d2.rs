@@ -1,6 +1,38 @@
 use num::{PrimInt, Signed};
 use std::fmt::{Debug, Display};
 
+#[macro_export]
+macro_rules! atot2 {
+    ($array:expr) => {{
+        let [a, b] = $array;
+        (a, b)
+    }};
+}
+
+#[macro_export]
+macro_rules! ttoa2 {
+    ($tuple:expr) => {{
+        let (a, b) = $tuple;
+        [a, b]
+    }};
+}
+
+#[macro_export]
+macro_rules! atot3 {
+    ($array:expr) => {{
+        let [a, b, c] = $array;
+        (a, b, c)
+    }};
+}
+
+#[macro_export]
+macro_rules! ttoa3 {
+    ($tuple:expr) => {{
+        let (a, b, c) = $tuple;
+        [a, b, c]
+    }};
+}
+
 use crate::board::nd;
 
 pub fn in_bounds<T>(bounds : (T, T), p : (T, T)) -> bool
@@ -96,6 +128,17 @@ impl Dir2D {
             Dir2D::Down => (p.0 + n, p.1),
             Dir2D::Right => (p.0, p.1 + n),
             Dir2D::Left => (p.0, p.1 - n)
+        }
+    }
+
+    pub fn rev_advance<T>(&self, p : (T, T), n : T) -> (T, T)
+    where T: PrimInt
+    {
+        match self {
+            Dir2D::Up => (p.0 + n, p.1),
+            Dir2D::Down => (p.0 - n, p.1),
+            Dir2D::Right => (p.0, p.1 - n),
+            Dir2D::Left => (p.0, p.1 + n)
         }
     }
 

@@ -9,10 +9,12 @@ edition = "2021"
 utils = { path = "../../util/rust" }
 ndarray = "0.16.1"
 num = "0.4.3"
-petgraph = "0.6.5"
-itertools = "0.13.0"
+petgraph = "0.7.0"
+itertools = "0.14.0"
 serde_json = "1.0.134"
 range-set = "0.0.11"
+cgmath = "0.18.0"
+bimap = "0.6.3"
 
 [[bin]]
 name = "day_1"
@@ -97,3 +99,19 @@ path = "src/20.rs"
 [[bin]]
 name = "day_21"
 path = "src/21.rs"
+
+[[bin]]
+name = "day_22"
+path = "src/22.rs"
+
+[[bin]]
+name = "day_23"
+path = "src/23.rs"
+
+[[bin]]
+name = "day_24"
+path = "src/24.rs"
+
+[[bin]]
+name = "day_25"
+path = "src/25.rs"
