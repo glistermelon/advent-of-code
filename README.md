@@ -1,3 +1,10 @@
+## Primary Languages by Year
+
+* **2015** *(Retroactive)* - Python
+* **2016 (WIP)** *(Retroactive)* - C#
+* **2022** *(Retroactive)* - Rust (originally Python but I didn't save my solutions in 2022)
+* **2024** *(Retroactive)* - Python
+
 ## Notes on inclusion of inputs
 
 Okay; I know it might be controversial, but I'm going to include my inputs regardless of Eric's request not to. Here is my reasoning:
