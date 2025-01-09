@@ -2,8 +2,8 @@
 
 * **2015** *(Retroactive)* - Python
 * **2016 (WIP)** *(Retroactive)* - C#
-* **2022** *(Retroactive)* - Rust (originally Python but I didn't save my solutions in 2022)
-* **2024** *(Retroactive)* - Python
+* **2022** *(Semi-retroactive)* - Rust (originally Python but I didn't save my solutions in 2022)
+* **2024** - Python
 
 ## Notes on inclusion of inputs
 
