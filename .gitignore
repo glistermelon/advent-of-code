@@ -8,3 +8,7 @@ util/python/__pycache__/*
 */java/target/
 Cargo.lock
 target/
+*/csharp/Program.cs
+*/csharp/bin/
+*/csharp/obj/
+.vscode/
