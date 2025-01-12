@@ -13,8 +13,6 @@ class Bot {
     readonly bool LowOutput;
     int? Num;
 
-    static int counter = 0;
-
     public Bot(int id, int high, int low, bool highOut, bool lowOut, int? num) {
         Id = id;
         High = high;
