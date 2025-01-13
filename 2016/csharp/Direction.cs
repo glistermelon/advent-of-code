@@ -13,6 +13,8 @@ class Direction {
     public static Direction Down = new(2);
     public static Direction Left = new(3);
 
+    public static Direction[] Directions = [ Up, Right, Down, Left ];
+
     public (int, int) Advance((int x, int y) point, int delta, Bound2D? bound) {
         point = Num switch {
             0 => (point.x, point.y - delta),
@@ -51,6 +53,10 @@ class Direction {
             '<' => Left,
             _ => throw new Exception()
         };
+    }
+
+    public char ToLetter() {
+        return "URDL"[Num];
     }
 
 }

@@ -18,6 +18,14 @@ class Utility {
         return a < b ? a : b;
     }
 
+    public static ulong Max(ulong a, ulong b) {
+        return a > b ? a : b;
+    }
+
+    public static ulong Min(ulong a, ulong b) {
+        return a < b ? a : b;
+    }
+
     public static int ClampExclusive(int n, int a, int b) {
         if (n <= a) return a + 1;
         if (n >= b) return b - 1;
