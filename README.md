@@ -1,7 +1,7 @@
 ## Primary Languages by Year
 
 * **2015** *(Retroactive)* - Python
-* **2016 (WIP)** *(Retroactive)* - C#
+* **2016** *(Retroactive)* - C#
 * **2022** *(Semi-retroactive)* - Rust (originally Python but I didn't save my solutions in 2022)
 * **2024** - Python
 
