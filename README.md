@@ -2,6 +2,7 @@
 
 * **2015** *(Retroactive)* - Python
 * **2016** *(Retroactive)* - C#
+* **2017** *(Retroactive)* - x86 assembly (if I don't give up)
 * **2022** *(Semi-retroactive)* - Rust (originally Python but I didn't save my solutions in 2022)
 * **2024** - Python
 

@@ -12,3 +12,6 @@ target/
 */csharp/bin/
 */csharp/obj/
 .vscode/
+
+*/x86asm/*
+!*/x86asm/*.*
