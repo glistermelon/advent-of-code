@@ -61,7 +61,8 @@ _read_file_to_buffer:
 
     mov rax, 9    ; mmap
     mov rdi, 0
-    mov rsi, [rel file_stats + 8]
+    mov rsi, [rel file_stats + 48]
+    inc rsi       ; null terminate
     mov rdx, 3    ; PROT_READ | PROT_WRITE
     mov r10, 0x2  ; MAP_PRIVATE
     mov r8, [rel fd]
@@ -75,7 +76,7 @@ _read_file_to_buffer:
     syscall
 
     mov rax, r15
-    mov rdx, [rel file_stats + 8]
+    mov rdx, [rel file_stats + 48]
 
     ret
 
@@ -153,24 +154,64 @@ _solve_part1:
     mov r10, rax
     mov r11, 0
 
-_solve_loop1:
+_solve1_loop1:
     movzx rax, byte [r8]
     movzx rbx, byte [r9]
     cmp ax, bx
-    jnz _solve_label1
+    jnz _solve1_label1
     sub rax, 48
     add r11, rax
-_solve_label1:
+_solve1_label1:
     cmp r9, r8
-    jl _solve_loop1_break
+    jl _solve1_loop1_break
     inc r8
     inc r9
     mov rax, [r9]
     test rax, rax
-    jnz _solve_loop1
+    jnz _solve1_loop1
     mov r9, r10
-    jmp _solve_loop1
-_solve_loop1_break:
+    jmp _solve1_loop1
+_solve1_loop1_break:
+
+    mov rax, r11
+    call _uint_to_str
+    mov rsi, rax
+    call _println
+
+    ret
+
+_solve_part2:
+
+    lea rdi, [rel input_file_path]
+    call _read_file_to_buffer
+
+    mov r8, rax
+    mov r9, rax
+    mov r10, rax
+    mov r11, 0
+
+    shr rdx, 1
+    add r9, rdx
+
+_solve2_loop1:
+    movzx rax, byte [r8]
+    movzx rbx, byte [r9]
+    cmp ax, bx
+    jnz _solve2_label1
+    sub rax, 48
+    add r11, rax
+_solve2_label1:
+    mov rax, [r8]
+    test rax, rax
+    jz _solve2_loop1_break
+    inc r8
+    inc r9
+    mov rax, [r9]
+    test rax, rax
+    jnz _solve2_loop1
+    mov r9, r10
+    jmp _solve2_loop1
+_solve2_loop1_break:
 
     mov rax, r11
     call _uint_to_str
@@ -181,4 +222,5 @@ _solve_loop1_break:
 
 _start:
     call _solve_part1
+    call _solve_part2
     call _exit
