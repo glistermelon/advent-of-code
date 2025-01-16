@@ -8,6 +8,8 @@
 
 [x86 and amd64 instruction reference](https://www.felixcloutier.com/x86/)
 
+![alt text](registers.png)
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
