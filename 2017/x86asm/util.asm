@@ -119,12 +119,9 @@ _uint_to_str:
     add r8, 20
 _uint_to_str_loop1:
 
-    ; Split rax into edx:eax
-    mov rdx, rax
-    shr rdx, 32
-
-    mov ecx, 10
-    div ecx
+    mov rdx, 0
+    mov rcx, 10
+    div rcx
 
     mov [r8], dl
     add byte [r8], 48  ; ASCII '0'
@@ -250,43 +247,4 @@ _qsort_partition_loop1_break:
     shr rax, 3
     xchg rax, rcx
 
-    ret
-
-_str_to_uint:
-
-    ;  IN rax: string (null terminated)
-    ; OUT rax: parsed uint
-
-    mov rbx, rax
-
-_str_to_uint_loop1:
-    inc rax
-    mov rcx, [rax]
-    test rcx, rcx
-    jnz _str_to_uint_loop1
-
-    mov rcx, rax
-    sub rcx, rbx ; rcx = length
-    mov rdi, rax
-    dec rdi      ; rdi = pointer to last character
-    mov rbx, 1   ; rbx = 10^n
-    mov rsi, 0   ; output
-
-_str_to_uint_loop2:
-
-    movzx rax, byte [rdi]
-    sub rax, 48  ; ASCII '0'
-    mul rbx
-    add rsi, rax
-
-    dec rdi
-
-    mov r8, rbx
-    shl r8, 3
-    shl rbx, 1
-    add rbx, r8
-
-    loop _str_to_uint_loop2
-
-    mov rax, rsi
     ret
