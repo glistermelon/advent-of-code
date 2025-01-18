@@ -12,7 +12,10 @@
 global _linked_list_next
 global _linked_list_prev
 global _linked_list_new
+global _linked_list_data
 global _linked_list_push
+global _linked_list_length
+global _linked_list_next
 
 extern _allocate_mem
 
@@ -32,6 +35,41 @@ _linked_list_prev:
     ; OUT rax: pointer to previous node
 
     mov rax, [rax + LL_FIELD_PREV]
+    ret
+
+_linked_list_data:
+
+    ;  IN rax: pointer to node
+    ; OUT rbx: data
+
+    mov rbx, [rax + LL_FIELD_DATA]
+    ret
+
+_linked_list_length:
+
+    ;  IN rax: (linked_list_node*) pointer to head node
+    ; OUT rcx: number of nodes (will not go backwards)
+
+    ; unsafe registers: rax, rcx, r8
+
+    ; If the head node isn't storing any data, return 0
+    mov r8, [rax + LL_FIELD_DATA]
+    test r8, r8
+    jnz _linked_list_length_label1
+    mov rcx, 0
+    ret
+
+    ; Find the last
+_linked_list_length_label1:
+    mov rcx, 1
+_linked_list_length_loop1:
+    mov r8, [rax + LL_FIELD_NEXT]
+    test r8, r8
+    jz _linked_list_length_loop1_break
+    mov rax, r8
+    inc rcx
+    jmp _linked_list_length_loop1
+_linked_list_length_loop1_break:
     ret
 
 _linked_list_new:

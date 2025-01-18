@@ -12,9 +12,11 @@
 
 global _string_length
 global _string_substring
+global _string_split
 
 extern _linked_list_new
 extern _linked_list_push
+extern _allocate_mem
 
 section .rodata
 
@@ -93,6 +95,15 @@ _string_substring:
     push rbx
     movdqu xmm1, [rbx]
     call _string_length
+
+    ; Ensure string length isn't zero
+    test rcx, rcx
+    jnz _string_substring_label1
+    add rsp, 16
+    mov rcx, -1
+    ret
+_string_substring_label1:
+
     mov rbx, rcx
     dec rbx
     mov rdx, 0
@@ -125,35 +136,79 @@ _string_split:
 
     ;  IN rax: string
     ;  IN rbx: splitter string
-    ; OUT XXX: linked_list of explicit_string
+    ; OUT rdx: linked_list of explicit_string
 
     ; WARNING: The returned string segments reference the data in the provided string.
     ; Modifying the data in the string may invalidate the result.
 
-    push 0
-    push rbx
-    push rax
+    ; Initialize stack
+
+    mov r8, 0
+    push r8  ; substring length  (rsp + 24)
+    push r8  ; linked list       (rsp + 16)
+    push rbx ; substring         (rsp + 8)
+    push rax ; string            (rsp + 0)
+
     call _linked_list_new
-    mov [esp + 16], rax
+    mov [rsp + 16], rax
+
+    mov rax, [rsp + 8]
+    call _string_length
+    mov [rsp + 24], rcx
 
 _string_split_loop1:
 
-    mov rbx, [esp + 8]
-    mov rax, [esp]
+    ; Get index of substring in string
+    mov rbx, [rsp + 8]
+    mov rax, [rsp]
     call _string_substring
     cmp rcx, -1
     jz _string_split_loop1_break
+    test rcx, rcx ; no zero length segments
+    jnz _string_split_label1
+    pop rax
+    inc rax
+    push rax
 
+_string_split_label1:
+
+    ; Initialize a new explicit_string
     push rcx
     mov rax, EXSTR_SIZE
     call _allocate_mem
     mov rbx, rax
-    pop rcx
-    pop rax
+    pop rcx ; substring index
+    pop rax ; string pointer
     mov [rbx + EXSTR_FIELD_DATA], rax
     mov [rbx + EXSTR_FIELD_LENGTH], ecx
 
+    ; Increment string pointer
     add rax, rcx
-    ...
+    add rax, [rsp + 16] ; substring length
+    push rax
+
+    ; Push the string to the linked list
+    mov rax, [rsp + 16]
+    call _linked_list_push
+
+    jmp _string_split_loop1
 
 _string_split_loop1_break:
+
+    ; Add the last string segment
+    mov rax, EXSTR_SIZE
+    call _allocate_mem
+    mov rbx, rax
+    mov rax, [rsp] ; string pointer
+    call _string_length ; rcx = length
+    mov rax, [rsp] ; still string pointer
+    mov [rbx + EXSTR_FIELD_DATA], rax
+    mov [rbx + EXSTR_FIELD_LENGTH], ecx
+    mov rax, [rsp + 16]
+    call _linked_list_push
+
+    ; Clean up stack
+    mov rdx, [rsp + 16]
+    add rsp, 32
+
+    ret
