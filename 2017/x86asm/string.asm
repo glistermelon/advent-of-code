@@ -6,19 +6,16 @@
 ; The data should still be null terminated.
 ; The null byte is not included in length.
 
-%define EXSTR_SIZE 12
-%define EXSTR_FIELD_DATA 0
-%define EXSTR_FIELD_LENGTH 8
+%include "string_inc.asm"
 
 global _string_length
 global _string_substring
 global _string_split
+global _string_to_uint
 
 extern _linked_list_new
 extern _linked_list_push
 extern _allocate_mem
-
-section .rodata
 
 section .text
 
@@ -33,7 +30,7 @@ _string_to_uint:
 
 _string_to_uint_loop1:
     inc rax
-    mov rcx, [rax]
+    movzx rcx, byte [rax]
     test rcx, rcx
     jnz _string_to_uint_loop1
 
@@ -137,6 +134,8 @@ _string_split:
     ;  IN rax: string
     ;  IN rbx: splitter string
     ; OUT rdx: linked_list of explicit_string
+
+    ; everything: probably everything
 
     ; WARNING: The returned string segments reference the data in the provided string.
     ; Modifying the data in the string may invalidate the result.
