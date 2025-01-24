@@ -23,7 +23,8 @@ _println:
     
     mov rdx, rsi
 _println_label2:
-    mov ecx, [rdx]
+    mov ecx, 0
+    mov cl, [rdx]
     jecxz _println_label1
     inc rdx
     jmp _println_label2

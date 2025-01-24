@@ -13,9 +13,12 @@ global _string_substring
 global _string_split
 global _string_to_uint
 global _string_equals
+global _string_split_nullify
 
 extern _linked_list_new
 extern _linked_list_push
+extern _linked_list_next
+extern _linked_list_data
 extern _allocate_mem
 
 section .text
@@ -212,6 +215,23 @@ _string_split_loop1_break:
     add rsp, 32
 
     ret
+
+_string_split_nullify:
+
+    ;  IN rax: linked list of explicit_string
+
+    test rax, rax
+    jnz _string_split_nullify_label1
+    ret
+_string_split_nullify_label1:
+    call _linked_list_data
+    mov rcx, 0
+    mov ecx, [rbx + EXSTR_FIELD_LENGTH]
+    mov rbx, [rbx + EXSTR_FIELD_DATA]
+    add rbx, rcx
+    mov byte [rbx], 0
+    call _linked_list_next
+    jmp _string_split_nullify
 
 _string_equals:
 
