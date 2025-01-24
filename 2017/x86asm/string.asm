@@ -12,6 +12,7 @@ global _string_length
 global _string_substring
 global _string_split
 global _string_to_uint
+global _string_equals
 
 extern _linked_list_new
 extern _linked_list_push
@@ -210,4 +211,55 @@ _string_split_loop1_break:
     mov rdx, [rsp + 16]
     add rsp, 32
 
+    ret
+
+_string_equals:
+
+    ;  IN rax: string 1
+    ;  IN rbx: string 2
+    ; OUT rcx: equal ? 1 : 0
+
+    ; unsafe: rax, rbx, rcx, rdx, rdi, rsi
+
+    push rax
+    call _string_length
+    mov rdx, rcx
+    mov rax, rbx
+    call _string_length
+    pop rax
+    cmp rcx, rdx
+    jz _string_equals_label1
+    mov rcx, 0
+    ret
+_string_equals_label1:
+
+_string_equals_loop:
+
+    cmp rcx, 16
+    jc _string_equals_loop_break
+    movdqu xmm1, [rax]
+    movdqu xmm2, [rbx]
+    pcmpeqb xmm1, xmm2
+    pmovmskb edx, xmm1
+    add dx, 1
+    jnc _string_equals_false
+    sub rcx, 16
+    add rax, 16
+    add rbx, 16
+    jmp _string_equals_loop
+
+_string_equals_loop_break:
+    test rcx, rcx
+    jz _string_equals_true
+    mov rsi, rax
+    mov rdi, rbx
+    rep cmpsb
+    jnz _string_equals_false
+    test rcx, rcx
+    jnz _string_equals_false
+_string_equals_true:
+    mov rcx, 1
+    ret
+_string_equals_false:
+    mov rcx, 0
     ret
