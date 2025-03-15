@@ -1,3 +1,0 @@
-%define EXSTR_SIZE 12
-%define EXSTR_FIELD_DATA 0
-%define EXSTR_FIELD_LENGTH 8
