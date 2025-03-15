@@ -15,3 +15,5 @@ target/
 
 */x86asm/*
 !*/x86asm/*.*
+
+.env
