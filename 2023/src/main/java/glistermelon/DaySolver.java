@@ -8,7 +8,7 @@ import java.nio.file.Path;
 public abstract class DaySolver {
 
     private final int day;
-    private final String puzzleInput;
+    protected final String puzzleInput;
 
     public DaySolver(int day) throws IOException {
         this.day = day;
@@ -23,8 +23,9 @@ public abstract class DaySolver {
     public abstract String solvePart2();
 
     public BenchmarkData benchmark(int part) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        var method = this.getClass().getMethod("solvePart" + part);
         long start = System.nanoTime();
-        String sol = (String)this.getClass().getMethod("solvePart" + part).invoke(this);
+        String sol = (String)method.invoke(this);
         double time = (double)(System.nanoTime() - start) / 1000000;
         return new BenchmarkData(sol, time);
     }
