@@ -37,45 +37,70 @@ public class Day10 extends DaySolver {
                 }
             }
         }
-        loop = exploreLoop(start, null, start);
-        assert loop != null;
-        loop.addFirst(loop.removeLast());
+        loop = exploreLoop(start);
         return String.valueOf((loop.size() + 1) / 2);
     }
 
     public String solvePart2() {
-        List<R2> outside = fillSpace(new R2(0, 0), loop);
-        Set<R2> inside = new HashSet<>();
-        Dir in = null;
-        R2 start = null;
-        int i = 0, j = 1;
-        while (!loop.get(i).equals(start)) {
-            R2 p1 = loop.get(i);
-            R2 p2 = loop.get(j);
-            Dir dir = Dir.fromDelta(p2.sub(p1));
-            if (in == null) {
-                Dir d = dir.turnRight();
-                if (outside.contains(d.advance(p1))) in = d.flip();
-                else if (outside.contains(d.flip().advance(p1))) in = d;
-                if (in != null) start = p1;
+
+        List<R2> barriers = new ArrayList<>();
+        for (R2 p : loop) {
+            int x = p.x(), y = p.y();
+            char c = map[y][x];
+            x = 3 * x + 1;
+            y = 3 * y + 1;
+            barriers.add(new R2(x, y));
+            switch (c) {
+                case '|':
+                    barriers.add(new R2(x, y - 1));
+                    barriers.add(new R2(x, y + 1));
+                case '-':
+                    barriers.add(new R2(x - 1, y));
+                    barriers.add(new R2(x + 1, y));
+                case 'F':
+                    barriers.add(new R2(x + 1, y));
+                    barriers.add(new R2(x, y + 1));
+                case '7':
+                    barriers.add(new R2(x - 1, y));
+                    barriers.add(new R2(x, y + 1));
+                case 'J':
+                    barriers.add(new R2(x, y - 1));
+                    barriers.add(new R2(x - 1, y));
+                case 'L':
+                    barriers.add(new R2(x, y - 1));
+                    barriers.add(new R2(x + 1, y));
+                default:
+                    break;
             }
-            if (in != null) {
-                R2 insidePoint = in.advance(p1);
-                if (!loop.contains(insidePoint)) {
-                    inside.addAll(fillSpace(insidePoint, loop));
+        }
+        List<R2> outside = fillSpace(new R2(0, 0), barriers, 3 * map[0].length, 3 * map.length);
+        int result = 0;
+        for (int y = 0; y < 3 * map.length; y += 3) {
+            for (int x = 0; x < 3 * map[0].length; x += 3) {
+                boolean in = true;
+                for (int dx = 0; dx < 3; dx++) {
+                    for (int dy = 0; dy < 3; dy++) {
+                        R2 p = new R2(x + dx, y + dy);
+                        if (outside.contains(p) || barriers.contains(p)) {
+                            in = false;
+                            break;
+                        }
+                    }
+                    if (!in) break;
                 }
+                if (in) result++;
             }
-            i++;
-            j++;
-            if (i == loop.size()) i = 0;
-            if (j == loop.size()) j = 0;
-            if (in != null) {
-                Dir nextDir = Dir.fromDelta(loop.get(j).sub(loop.get(i)));
-                if (dir.turnRight().equals(nextDir)) in = in.turnRight();
-                else if (dir.turnLeft().equals(nextDir)) in = in.turnLeft();
+        }
+
+        for (int y = 0; y < 3 * map.length; y++) {
+            for (int x = 0; x < 3 * map[0].length; x++) {
+                System.out.print(barriers.contains(new R2(x, y)) ? '#' : '.');
             }
-        };
-        return String.valueOf(inside.size());
+            System.out.println();
+        }
+
+        return String.valueOf(result);
+
     }
 
     private boolean canGo(R2 p, Dir d) {
@@ -92,53 +117,37 @@ public class Day10 extends DaySolver {
     }
 
     // map must be initialized and S must be identified
-    private List<R2> exploreLoop(R2 start, R2 visited, R2 end) {
-        if (visited == null) {
+    private List<R2> exploreLoop(R2 start) {
+        List<R2> points = new ArrayList<>();
+        points.add(start);
+        R2 prev = null;
+        do {
             for (Dir d : Dir.allDirections()) {
-                if (canGo(start, d) && canGo(d.advance(start), d.flip())) {
-                    visited = d.advance(start);
+                R2 next = d.advance(start);
+                if (!next.equals(prev) && canGo(start, d) && canGo(next, d.flip())) {
+                    prev = start;
+                    start = next;
+                    points.add(start);
                     break;
                 }
             }
-        }
-        List<R2> output = new ArrayList<>();
-        while (true) {
-            List<R2> candidates = new ArrayList<>();
-            for (Dir d : Dir.allDirections()) {
-                if (!canGo(start, d)) continue;
-                R2 p = d.advance(start);
-                if (p.equals(visited) || !canGo(p, d.flip())) continue;
-                candidates.add(p);
-            }
-            switch (candidates.size()) {
-                case 0:
-                    return null;
-                case 1:
-                    R2 p = candidates.getFirst();
-                    output.add(p);
-                    if (p.equals(end)) return output;
-                    visited = start;
-                    start = p;
-                    break;
-                default:
-                    for (R2 cp : candidates) {
-                        List<R2> points = exploreLoop(cp, start, end);
-                        if (points == null) continue;
-                        output.addAll(points);
-                        return output;
-                    }
-            }
-        }
+        } while (!points.getFirst().equals(start));
+        points.removeLast();
+        return points;
     }
 
-    private List<R2> fillSpace(R2 start, List<R2> boundary) {
+    private List<R2> fillSpace(R2 start, List<R2> boundary, int width, int height) {
         List<R2> visited = new ArrayList<>();
         visited.add(start);
         Queue<R2> queue = new ArrayDeque<R2>();
         queue.add(start);
         while (!queue.isEmpty()) {
             for (R2 point : queue.poll().adjacent()) {
-                if (point.getChar(map) == null || visited.contains(point) || boundary.contains(point)) continue;
+                if (
+                        point.x() < 0 || point.y() < 0
+                        || point.x() >= width || point.y() >= height
+                        || visited.contains(point) || boundary.contains(point)
+                ) continue;
                 queue.add(point);
                 visited.add(point);
             }
