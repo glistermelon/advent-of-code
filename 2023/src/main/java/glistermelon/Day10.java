@@ -54,21 +54,27 @@ public class Day10 extends DaySolver {
                 case '|':
                     barriers.add(new R2(x, y - 1));
                     barriers.add(new R2(x, y + 1));
+                    break;
                 case '-':
                     barriers.add(new R2(x - 1, y));
                     barriers.add(new R2(x + 1, y));
+                    break;
                 case 'F':
                     barriers.add(new R2(x + 1, y));
                     barriers.add(new R2(x, y + 1));
+                    break;
                 case '7':
                     barriers.add(new R2(x - 1, y));
                     barriers.add(new R2(x, y + 1));
+                    break;
                 case 'J':
                     barriers.add(new R2(x, y - 1));
                     barriers.add(new R2(x - 1, y));
+                    break;
                 case 'L':
                     barriers.add(new R2(x, y - 1));
                     barriers.add(new R2(x + 1, y));
+                    break;
                 default:
                     break;
             }
@@ -90,13 +96,6 @@ public class Day10 extends DaySolver {
                 }
                 if (in) result++;
             }
-        }
-
-        for (int y = 0; y < 3 * map.length; y++) {
-            for (int x = 0; x < 3 * map[0].length; x++) {
-                System.out.print(barriers.contains(new R2(x, y)) ? '#' : '.');
-            }
-            System.out.println();
         }
 
         return String.valueOf(result);
@@ -136,23 +135,28 @@ public class Day10 extends DaySolver {
         return points;
     }
 
-    private List<R2> fillSpace(R2 start, List<R2> boundary, int width, int height) {
-        List<R2> visited = new ArrayList<>();
-        visited.add(start);
-        Queue<R2> queue = new ArrayDeque<R2>();
+    private List<R2> fillSpace(R2 start, List<R2> boundaryList, int width, int height) {
+        Set<R2> boundary = new HashSet<>(boundaryList.size());
+        boundary.addAll(boundaryList);
+        boolean[][] visited = new boolean[width][height];
+        visited[start.x()][start.y()] = true;
+        Queue<R2> queue = new ArrayDeque<>();
         queue.add(start);
+        List<R2> output = new ArrayList<>();
         while (!queue.isEmpty()) {
             for (R2 point : queue.poll().adjacent()) {
+                int x = point.x(), y = point.y();
                 if (
-                        point.x() < 0 || point.y() < 0
-                        || point.x() >= width || point.y() >= height
-                        || visited.contains(point) || boundary.contains(point)
+                        x < 0 || y < 0
+                        || x >= width || y >= height
+                        || visited[x][y] || boundary.contains(point)
                 ) continue;
                 queue.add(point);
-                visited.add(point);
+                visited[x][y] = true;
+                output.add(point);
             }
         }
-        return visited;
+        return output;
     }
 
 }
