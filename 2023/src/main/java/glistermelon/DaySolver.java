@@ -19,7 +19,7 @@ public abstract class DaySolver {
         return this.puzzleInput.replace("\r", "").split("\n");
     }
 
-    public abstract String solvePart1();
+    public abstract String solvePart1() throws Exception;
     public abstract String solvePart2();
 
     public BenchmarkData benchmark(int part) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
