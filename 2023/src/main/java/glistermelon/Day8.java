@@ -1,5 +1,7 @@
 package glistermelon;
 
+import org.apache.commons.math3.util.ArithmeticUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,21 +57,17 @@ public class Day8 extends DaySolver {
             if (node.name.endsWith("A")) nodes.add(node);
         }
 
-        long[] starts = new long[nodes.size()];
-        long[] periods = new long[starts.length];
+        long[] periods = new long[nodes.size()];
 
         for (int nodeIndex = 0; nodeIndex < nodes.size(); nodeIndex++) {
 
             Node node = nodes.get(nodeIndex);
             int patternIndex = 0;
-            long steps = 0;
             while (!node.name.endsWith("Z")) {
                 if (pattern.charAt(patternIndex) == 'R') node = node.rightNode;
                 else node = node.leftNode;
                 if (++patternIndex == pattern.length()) patternIndex = 0;
-                steps++;
             }
-            starts[nodeIndex] = steps;
 
             List<Integer> subperiods = new ArrayList<>();
             for (int repeats = 0; true; repeats++) {
@@ -90,15 +88,10 @@ public class Day8 extends DaySolver {
 
         }
 
-        long minStart = Arrays.stream(starts).min().getAsLong();
-        long period = 0;
-        for (int i = 0; i < starts.length; i++) {
-            if (starts[i] == minStart) period = periods[i];
-            starts[i] -= minStart;
-        }
-        long steps = 0;
+        long lcm = periods[0];
+        for (int i = 1; i < periods.length; i++) lcm = ArithmeticUtils.lcm(lcm, periods[i]);
 
-        return String.valueOf(steps);
+        return String.valueOf(lcm);
 
     }
 
