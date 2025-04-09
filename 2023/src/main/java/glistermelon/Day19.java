@@ -12,7 +12,7 @@ public class Day19 extends DaySolver {
     List<Workflow> workflows = new ArrayList<>();
     List<Part> parts = new ArrayList<>();
 
-    public String solvePart1() throws Exception {
+    public String solvePart1() {
 
         if (workflows.isEmpty()) parseInput();
 
@@ -85,14 +85,15 @@ public class Day19 extends DaySolver {
             instances.put(name, this);
         }
 
-        public boolean handlePart(Part part) throws Exception {
+        public boolean handlePart(Part part) {
             for (Check check : checks) {
                 if (check.partPasses(part)) {
                     String dst = check.getDestination();
                     return dst == null ? check.doesAccept() : instances.get(dst).handlePart(part);
                 }
             }
-            throw new Exception("how did we get here");
+            System.out.println("WARNING: how did we get here");
+            return false;
         }
 
         public static Workflow getWorkflow(String name) {

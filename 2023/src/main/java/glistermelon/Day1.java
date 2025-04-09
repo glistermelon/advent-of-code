@@ -23,7 +23,7 @@ public class Day1 extends DaySolver {
         int sum = 0;
         for (String ln : this.getPuzzleInputLines()) {
             int i = 0, j = ln.length() - 1;
-            Integer n1 = null, n2 = null;
+            Integer n1, n2;
             do {
                 n1 = intAt(ln, i);
                 i++;
