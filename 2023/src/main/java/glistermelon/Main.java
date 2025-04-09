@@ -4,6 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        DaySolver.getSolver(12).printOutputs();
+        DaySolver.getSolver(13).printOutputs();
     }
 }
