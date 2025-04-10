@@ -11,11 +11,7 @@ public class Day4 extends DaySolver {
 
     int[] matchList;
 
-    public void runSharedLogic() {}
-
-    public String solvePart1() {
-
-        int sum = 0;
+    public void runSharedLogic() {
 
         String[] lines = getPuzzleInputLines();
         matchList = new int[lines.length];
@@ -25,19 +21,25 @@ public class Day4 extends DaySolver {
             String[] split = line.substring(line.indexOf(':') + 2).split(" \\| ");
             int[] nums1 = Arrays.stream(split[0].split(" ")).mapToInt(Integer::parseInt).toArray();
             int[] nums2 = Arrays.stream(split[1].split(" ")).mapToInt(Integer::parseInt).toArray();
-            int points = 1;
             int matches = 0;
             for (int n : nums1) {
-                if (Arrays.stream(nums2).anyMatch(m -> n == m)) {
-                    points *= 2;
-                    matches++;
-                }
+                if (Arrays.stream(nums2).anyMatch(m -> n == m)) matches++;
             }
-            if (matches != 0) sum += points / 2;
             matchList[lineIndex] = matches;
         }
 
-        return String.valueOf(sum);
+    }
+
+    public String solvePart1() {
+
+        return String.valueOf(
+                Arrays.stream(matchList).map(n -> {
+                    int p = 1;
+                    for (int i = 0; i < n; i++) p *= 2;
+                    p /= 2;
+                    return p;
+                }).sum()
+        );
 
     }
 
