@@ -10,6 +10,8 @@ public class Day0 extends DaySolver {
         super(0);
     }
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
         return "";
     }

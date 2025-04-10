@@ -11,6 +11,8 @@ public class Day4 extends DaySolver {
 
     int[] matchList;
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         int sum = 0;

@@ -17,6 +17,7 @@ public abstract class DaySolver {
 
     private final int day;
     protected final String puzzleInput;
+    protected boolean sharedLogicDone = false;
 
     public DaySolver(int day) {
         this.day = day;
@@ -34,12 +35,40 @@ public abstract class DaySolver {
         return this.puzzleInput.replace("\r", "").split("\n");
     }
 
+    public abstract void runSharedLogic();
     public abstract String solvePart1();
     public abstract String solvePart2();
 
-    private Options getBenchmarkOptions(int part, boolean precise) {
+    public String solvePart1Safe() {
+        if (!sharedLogicDone) {
+            runSharedLogic();
+            sharedLogicDone = true;
+        }
+        return solvePart1();
+    }
+
+    public String solvePart2Safe() {
+        if (!sharedLogicDone) {
+            runSharedLogic();
+            sharedLogicDone = true;
+        }
+        return solvePart2();
+    }
+
+    public enum BenchmarkChoice {
+        SharedLogic,
+        Part1,
+        Part2
+    }
+
+    private Options getBenchmarkOptions(BenchmarkChoice choice, boolean precise) {
+        String regex = switch (choice) {
+            case SharedLogic -> SharedLogicBenchmarker.class.getName() + ".runSharedLogic";
+            case Part1 -> DayBenchmarker.class.getName() + ".runPart1";
+            case Part2 -> DayBenchmarker.class.getName() + ".runPart2";
+        };
         return new OptionsBuilder()
-                .include(DayBenchmarker.class.getName() + ".runPart" + part)
+                .include(regex)
                 .forks(1)
                 .warmupIterations(1)
                 .measurementIterations(1)
@@ -49,17 +78,8 @@ public abstract class DaySolver {
                 .build();
     }
 
-    public double benchmarkPart1(boolean precise) throws RunnerException {
-        final Options options = getBenchmarkOptions(1, precise);
-        var out = System.out;
-        System.setOut(new PrintStream(new NullOutputStream()));
-        double result = new Runner(options).runSingle().getPrimaryResult().getScore();
-        System.setOut(out);
-        return result;
-    }
-
-    public double benchmarkPart2(boolean precise) throws RunnerException {
-        final Options options = getBenchmarkOptions(2, precise);
+    public double benchmark(BenchmarkChoice choice, boolean precise) throws RunnerException {
+        final Options options = getBenchmarkOptions(choice, precise);
         var out = System.out;
         System.setOut(new PrintStream(new NullOutputStream()));
         double result = new Runner(options).runSingle().getPrimaryResult().getScore();
@@ -69,12 +89,14 @@ public abstract class DaySolver {
 
     public void printOutputs(boolean preciseBenchmarks) throws RunnerException {
         System.out.println("\u001b[4m" + "Solutions" + "\u001b[24m");
-        System.out.println("Part 1: \u001b[1m" + solvePart1() + "\u001b[22m");
-        System.out.println("Part 2: \u001b[1m" + solvePart2() + "\u001b[22m");
+        System.out.println("Part 1: \u001b[1m" + solvePart1Safe() + "\u001b[22m");
+        System.out.println("Part 2: \u001b[1m" + solvePart2Safe() + "\u001b[22m");
         System.out.println();
         System.out.println("\u001b[4m" + "Benchmarks" + "\u001b[24m");
-        String bench1 = Util.doubleToString(benchmarkPart1(preciseBenchmarks), 3);
-        String bench2 = Util.doubleToString(benchmarkPart2(preciseBenchmarks), 3);
+        String bench0 = Util.doubleToString(benchmark(BenchmarkChoice.SharedLogic, preciseBenchmarks), 3);
+        String bench1 = Util.doubleToString(benchmark(BenchmarkChoice.Part1, preciseBenchmarks), 3);
+        String bench2 = Util.doubleToString(benchmark(BenchmarkChoice.Part2, preciseBenchmarks), 3);
+        System.out.println("Shared: \u001b[1m" + bench0 + " ms\u001b[22m");
         System.out.println("Part 1: \u001b[1m" + bench1 + " ms\u001b[22m");
         System.out.println("Part 2: \u001b[1m" + bench2 + " ms\u001b[22m");
     }

@@ -9,6 +9,8 @@ public class Day7 extends DaySolver {
         super(7);
     }
 
+    public void runSharedLogic() {}
+
     private String solve(boolean allowJokers) {
 
         List<PokerHand> hands = new ArrayList<>();

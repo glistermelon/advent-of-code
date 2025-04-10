@@ -16,6 +16,8 @@ public class Day13 extends DaySolver {
     final List<List<String>> mapsRows = new ArrayList<>();
     final List<List<String>> mapsCols = new ArrayList<>();
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         if (mapsRows.isEmpty()) parseInput();

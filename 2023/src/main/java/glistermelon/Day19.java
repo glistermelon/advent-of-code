@@ -12,6 +12,8 @@ public class Day19 extends DaySolver {
     List<Workflow> workflows = new ArrayList<>();
     List<Part> parts = new ArrayList<>();
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         if (workflows.isEmpty()) parseInput();

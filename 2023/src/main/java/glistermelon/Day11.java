@@ -11,6 +11,8 @@ public class Day11 extends DaySolver {
         super(11);
     }
 
+    public void runSharedLogic() {}
+
     public String solve(int expansion) {
 
         List<R2L> galaxies = new ArrayList<>();

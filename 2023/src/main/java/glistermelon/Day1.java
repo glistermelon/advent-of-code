@@ -8,6 +8,8 @@ public class Day1 extends DaySolver {
         super(1);
     }
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
         int sum = 0;
         for (String ln : this.getPuzzleInputLines()) {

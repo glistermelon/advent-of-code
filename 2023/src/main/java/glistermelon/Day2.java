@@ -8,6 +8,8 @@ public class Day2 extends DaySolver {
         super(2);
     }
 
+    public void runSharedLogic() {}
+
     private final int maxRed = 12;
     private final int maxGreen = 13;
     private final int maxBlue = 14;

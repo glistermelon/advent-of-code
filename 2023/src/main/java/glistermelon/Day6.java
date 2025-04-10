@@ -9,6 +9,8 @@ public class Day6 extends DaySolver {
         super(6);
     }
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         String[] input = Arrays.stream(getPuzzleInputLines())

@@ -11,6 +11,8 @@ public class Day5 extends DaySolver {
         super(5);
     }
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         String[] lines = getPuzzleInputLines();

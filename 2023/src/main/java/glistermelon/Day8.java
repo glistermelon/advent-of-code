@@ -4,15 +4,15 @@ import org.apache.commons.math3.util.ArithmeticUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day8 extends DaySolver {
 
     public Day8() throws IOException {
         super(8);
     }
+
+    public void runSharedLogic() {}
 
     public String solvePart1() {
 

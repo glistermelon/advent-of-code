@@ -11,6 +11,8 @@ public class Day12 extends DaySolver {
 
     Map<String, Map<List<Integer>, Long>> cache = new HashMap<>();
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
         return solve(1);
     }

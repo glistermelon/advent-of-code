@@ -11,6 +11,8 @@ public class Day9 extends DaySolver {
         super(9);
     }
 
+    public void runSharedLogic() {}
+
     public String solvePart1() {
 
         int sum = 0;

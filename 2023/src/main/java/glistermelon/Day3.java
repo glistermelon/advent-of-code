@@ -1,10 +1,8 @@
 package glistermelon;
 
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Day3 extends DaySolver {
@@ -15,11 +13,10 @@ public class Day3 extends DaySolver {
 
     Integer[][] numbers;
 
-    public String solvePart1() {
+    public void runSharedLogic() {
 
         String[] lines = getPuzzleInputLines();
         numbers = new Integer[lines.length][lines[0].length()];
-        int sum = 0;
 
         for (int r = 0; r < lines.length; r++) {
             String line = lines[r];
@@ -60,7 +57,6 @@ public class Day3 extends DaySolver {
                 } while (false);
                 if (valid) {
                     int n = Integer.parseInt(line.substring(c0, c1));
-                    sum += n;
                     for (int c = c0; c < c1; c++) numbers[r][c] = n;
                 }
 
@@ -69,7 +65,14 @@ public class Day3 extends DaySolver {
             }
         }
 
-        return String.valueOf(sum);
+    }
+
+    public String solvePart1() {
+
+        return String.valueOf(
+                Arrays.stream(numbers).flatMapToInt(a -> Arrays.stream(a)
+                        .mapToInt(n -> n == null ? 0 : n)).sum()
+        );
 
     }
 

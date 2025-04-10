@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
-public class DayBenchmarker {
+public class SharedLogicBenchmarker {
 
     @Param({})
     public String dayNum;
@@ -18,19 +18,13 @@ public class DayBenchmarker {
     }
 
     @Benchmark
-    public void runPart1() {
-        solver.solvePart1();
-    }
-
-    @Benchmark
-    public void runPart2() {
-        solver.solvePart2();
+    public void runSharedLogic() {
+        solver.runSharedLogic();
     }
 
     @Setup(Level.Invocation)
     public void setUp() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         solver = DaySolver.getSolver(Integer.parseInt(dayNum));
-        solver.runSharedLogic();
     }
 
 }
