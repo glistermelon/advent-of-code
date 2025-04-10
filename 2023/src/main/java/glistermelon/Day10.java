@@ -12,9 +12,8 @@ public class Day10 extends DaySolver {
     char[][] map;
     List<R2> loop = null;
 
-    public void runSharedLogic() {}
+    public void runSharedLogic() {
 
-    public String solvePart1() {
         map = Arrays.stream(this.puzzleInput.split("\n"))
                 .map(String::toCharArray).toArray(char[][]::new);
         R2 start = R2.find(map, 'S');
@@ -40,7 +39,13 @@ public class Day10 extends DaySolver {
             }
         }
         loop = exploreLoop(start);
+
+    }
+
+    public String solvePart1() {
+
         return String.valueOf((loop.size() + 1) / 2);
+
     }
 
     public String solvePart2() {
