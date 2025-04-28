@@ -1,5 +1,7 @@
 package glistermelon;
 
+import org.apache.commons.math3.util.ArithmeticUtils;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -9,12 +11,74 @@ public class Day20 extends DaySolver {
         super(20);
     }
 
+    RepeaterModule broadcaster;
+    List<Module> modules;
+
     public void runSharedLogic() {}
 
     public String solvePart1() {
 
-        RepeaterModule broadcaster = new RepeaterModule();
-        List<Module> modules = new ArrayList<>();
+        resetSystem();
+
+        int lows = 0, highs = 0;
+        for (int press = 0; press < 1000; press++) {
+            lows++;
+            List<Signal> queue = new ArrayList<>();
+            queue.add(new Signal(broadcaster, null, false));
+            while (!queue.isEmpty()) {
+                Signal signal = queue.removeFirst();
+                List<Signal> relay = signal.target.processPulse(signal.sender, signal.high);
+                queue.addAll(relay);
+                for (Signal newSignal : relay) {
+                    if (newSignal.high) highs++;
+                    else lows++;
+                }
+            }
+        }
+
+        return String.valueOf(lows * highs);
+
+    }
+
+    public String solvePart2() {
+
+        resetSystem();
+
+        List<Long> periods = new ArrayList<>();
+
+        for (Module chainStart : broadcaster.targets) {
+
+            StringBuilder binary = new StringBuilder();
+            FlipModule node = (FlipModule)chainStart;
+            do {
+                binary.append(
+                        node.targets.stream().anyMatch(t -> t instanceof ConjModule) ? '1' : '0'
+                );
+                var targets = node.targets;
+                node = null;
+                for (Module next : targets) {
+                    if (next instanceof FlipModule) {
+                        node = (FlipModule)next;
+                        break;
+                    }
+                }
+            } while (node != null);
+
+            periods.add(Long.parseLong(binary.reverse().toString(), 2));
+
+        }
+
+        long lcm = 1;
+        for (long period : periods) lcm = ArithmeticUtils.lcm(lcm, period);
+
+        return String.valueOf(lcm);
+
+    }
+
+    private void resetSystem() {
+
+        broadcaster = new RepeaterModule();
+        modules = new ArrayList<>();
 
         Set<String> allNames = new HashSet<>();
         Set<String> nonDummyNames = new HashSet<>();
@@ -59,72 +123,12 @@ public class Day20 extends DaySolver {
         }
 
         for (Module m : modules) {
-            System.out.print(m.name + " ");
             m.loadPending();
             m.initialize();
         }
-        System.out.println();
         broadcaster.loadPending();
 
-        List<FlipModule> flips = modules.stream().filter(m -> m instanceof FlipModule)
-                .map(m -> (FlipModule)m).toList();
-        int[] periods = new int[flips.size()];
-
-        int lows = 0, highs = 0;
-        for (int press = 0; press < 3900; press++) {
-
-            for (int i = 0; i < flips.size(); i++) {
-                FlipModule flip = flips.get(i);
-                if (periods[i] == 0) {
-                    if (flip.state) periods[i] = 2 * press;
-                }
-                else {
-                    boolean expected = press % periods[i] >= periods[i] / 2;
-                    if (flip.state != expected) System.out.println(flip.name + " | " + press);
-                }
-            }
-
-            System.out.println(stateString(modules));
-            lows++;
-            List<Signal> queue = new ArrayList<>();
-            queue.add(new Signal(broadcaster, null, false));
-            while (!queue.isEmpty()) {
-                Signal signal = queue.removeFirst();
-                List<Signal> relay = signal.target.processPulse(signal.sender, signal.high);
-                queue.addAll(relay);
-                for (Signal newSignal : relay) {
-                    if (newSignal.high) highs++;
-                    else lows++;
-                }
-            }
-        }
-
-        return String.valueOf(lows * highs);
-
     }
-
-    public String solvePart2() {
-
-
-
-        return "";
-
-    }
-
-    public String stateString(List<Module> modules) {
-        StringBuilder s = new StringBuilder();
-        for (Module m : modules) {
-            if (m instanceof FlipModule) {
-                s.append(((FlipModule)m).state ? "1" : "0");
-            }
-            else if (m instanceof ConjModule) {
-                s.append(((ConjModule)m).memory.values().stream().allMatch(Boolean::booleanValue) ? "A" : "O");
-            }
-        }
-        return s.toString();
-    }
-
-    private record TimeIndex(int major, int minor) {}
 
     private record Signal(Module target, Module sender, boolean high) {}
 
@@ -148,10 +152,6 @@ public class Day20 extends DaySolver {
             List<String> names = pendingInputs.getOrDefault(moduleName, new ArrayList<>());
             names.add(inputName);
             pendingInputs.put(moduleName, names);
-        }
-
-        public void addTarget(Module module) {
-            targets.add(module);
         }
 
         public void setName(String name) {
@@ -202,7 +202,6 @@ public class Day20 extends DaySolver {
 
         protected Boolean handlePulse(Module sender, boolean high) {
             memory.put(sender, high);
-            if (!memory.values().stream().allMatch(Boolean::booleanValue)) System.out.println("surprise!");
             return !memory.values().stream().allMatch(Boolean::booleanValue);
         }
 
