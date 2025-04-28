@@ -46,4 +46,12 @@ public record Range(long start, long end) {
         return end - start;
     }
 
+    public boolean contains(long n) {
+        return n >= start && n < end;
+    }
+
+    public boolean isInclusiveEndpoint(long n) {
+        return start != end && (n == start || n == end - 1);
+    }
+
 }

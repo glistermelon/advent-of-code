@@ -27,14 +27,27 @@ public record Dir(int num) {
 
     public R2 advance(R2 point, int amount) {
         return switch (num) {
-            case 0 -> new R2(point.x(), point.y() - 1);
-            case 1 -> new R2(point.x() + 1, point.y());
-            case 2 -> new R2(point.x(), point.y() + 1);
-            case 3 -> new R2(point.x() - 1, point.y());
+            case 0 -> new R2(point.x(), point.y() - amount);
+            case 1 -> new R2(point.x() + amount, point.y());
+            case 2 -> new R2(point.x(), point.y() + amount);
+            case 3 -> new R2(point.x() - amount, point.y());
             default -> throw new IllegalStateException("Unexpected value: " + num);
         };
     }
     public R2 advance(R2 point) {
+        return advance(point, 1);
+    }
+
+    public R2L advance(R2L point, long amount) {
+        return switch (num) {
+            case 0 -> new R2L(point.x(), point.y() - amount);
+            case 1 -> new R2L(point.x() + amount, point.y());
+            case 2 -> new R2L(point.x(), point.y() + amount);
+            case 3 -> new R2L(point.x() - amount, point.y());
+            default -> throw new IllegalStateException("Unexpected value: " + num);
+        };
+    }
+    public R2L advance(R2L point) {
         return advance(point, 1);
     }
 
@@ -65,6 +78,16 @@ public record Dir(int num) {
             case 2 -> "Down";
             case 3 -> "Left";
             default -> "R(" + num + ")";
+        };
+    }
+
+    public static Dir fromChar(char c) {
+        return switch(c) {
+            case 'U' -> Dir.Up;
+            case 'R' -> Dir.Right;
+            case 'D' -> Dir.Down;
+            case 'L' -> Dir.Left;
+            default -> null;
         };
     }
 

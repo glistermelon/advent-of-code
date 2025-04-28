@@ -7,6 +7,8 @@ public class RangeSet {
 
     private final List<Range> ranges = new ArrayList<>();
 
+    public RangeSet() {}
+
     public RangeSet(Range range) {
         ranges.add(range);
     }
