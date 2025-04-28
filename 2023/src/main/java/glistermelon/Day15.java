@@ -2,7 +2,6 @@ package glistermelon;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Day15 extends DaySolver {
