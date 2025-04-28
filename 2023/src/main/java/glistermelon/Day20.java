@@ -59,13 +59,32 @@ public class Day20 extends DaySolver {
         }
 
         for (Module m : modules) {
+            System.out.print(m.name + " ");
             m.loadPending();
             m.initialize();
         }
+        System.out.println();
         broadcaster.loadPending();
 
+        List<FlipModule> flips = modules.stream().filter(m -> m instanceof FlipModule)
+                .map(m -> (FlipModule)m).toList();
+        int[] periods = new int[flips.size()];
+
         int lows = 0, highs = 0;
-        for (int i = 0; i < 1000; i++) {
+        for (int press = 0; press < 3900; press++) {
+
+            for (int i = 0; i < flips.size(); i++) {
+                FlipModule flip = flips.get(i);
+                if (periods[i] == 0) {
+                    if (flip.state) periods[i] = 2 * press;
+                }
+                else {
+                    boolean expected = press % periods[i] >= periods[i] / 2;
+                    if (flip.state != expected) System.out.println(flip.name + " | " + press);
+                }
+            }
+
+            System.out.println(stateString(modules));
             lows++;
             List<Signal> queue = new ArrayList<>();
             queue.add(new Signal(broadcaster, null, false));
@@ -85,8 +104,27 @@ public class Day20 extends DaySolver {
     }
 
     public String solvePart2() {
+
+
+
         return "";
+
     }
+
+    public String stateString(List<Module> modules) {
+        StringBuilder s = new StringBuilder();
+        for (Module m : modules) {
+            if (m instanceof FlipModule) {
+                s.append(((FlipModule)m).state ? "1" : "0");
+            }
+            else if (m instanceof ConjModule) {
+                s.append(((ConjModule)m).memory.values().stream().allMatch(Boolean::booleanValue) ? "A" : "O");
+            }
+        }
+        return s.toString();
+    }
+
+    private record TimeIndex(int major, int minor) {}
 
     private record Signal(Module target, Module sender, boolean high) {}
 
@@ -164,6 +202,7 @@ public class Day20 extends DaySolver {
 
         protected Boolean handlePulse(Module sender, boolean high) {
             memory.put(sender, high);
+            if (!memory.values().stream().allMatch(Boolean::booleanValue)) System.out.println("surprise!");
             return !memory.values().stream().allMatch(Boolean::booleanValue);
         }
 
