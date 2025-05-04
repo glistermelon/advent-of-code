@@ -19,6 +19,10 @@ public record Range(long start, long end) {
 
     }
 
+    public boolean overlaps(Range other) {
+        return start < other.end && end > other.start;
+    }
+
     public List<Range> remove(Range other) {
 
         List<Range> output = new ArrayList<>();

@@ -3,8 +3,6 @@ package glistermelon;
 import java.io.IOException;
 import java.util.*;
 
-// copyable template
-
 public class Day21 extends DaySolver {
 
     public Day21() throws IOException {
