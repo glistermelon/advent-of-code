@@ -87,6 +87,11 @@ public record Dir(int num) {
             case 'R' -> Dir.Right;
             case 'D' -> Dir.Down;
             case 'L' -> Dir.Left;
+            case '^' -> Dir.Up;
+            case '>' -> Dir.Right;
+            case 'V' -> Dir.Down;
+            case 'v' -> Dir.Down;
+            case '<' -> Dir.Left;
             default -> null;
         };
     }
