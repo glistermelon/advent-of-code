@@ -44,4 +44,10 @@ public record R2L(long x, long y) {
         return new R2L(x - other.x, y - other.y);
     }
 
+    public R2L mul(long c) { return new R2L(x * c, y * c); }
+
+    public long crossMagnitude(R2L other) {
+        return x * other.y - y * other.x;
+    }
+
 }
