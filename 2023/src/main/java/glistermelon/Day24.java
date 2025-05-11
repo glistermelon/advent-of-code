@@ -1,10 +1,17 @@
 package glistermelon;
 
+import org.sosy_lab.common.ShutdownNotifier;
+import org.sosy_lab.common.configuration.Configuration;
+import org.sosy_lab.common.configuration.InvalidConfigurationException;
+import org.sosy_lab.common.log.LogManager;
+import org.sosy_lab.java_smt.SolverContextFactory;
+import org.sosy_lab.java_smt.api.*;
+import org.sosy_lab.java_smt.api.NumeralFormula.*;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.*;
 
 public class Day24 extends DaySolver {
@@ -59,27 +66,53 @@ public class Day24 extends DaySolver {
 
     public String solvePart2() {
 
-        return "";
+        try (SolverContext context = SolverContextFactory.createSolverContext(
+                Configuration.defaultConfiguration(),
+                LogManager.createNullLogManager(),
+                ShutdownNotifier.createDummy(),
+                SolverContextFactory.Solvers.Z3
+        )) {
 
-    }
+            ProverEnvironment prover = context.newProverEnvironment(SolverContext.ProverOptions.GENERATE_MODELS);
+            IntegerFormulaManager manager = context.getFormulaManager().getIntegerFormulaManager();
 
-    Map<BigInteger, List<BigInteger>> divisorsCache = new HashMap<>();
-    private List<BigInteger> getDivisors(BigInteger n) {
+            char[] axes = new char[] { 'x', 'y', 'z' };
 
-        if (divisorsCache.containsKey(n)) return divisorsCache.get(n);
+            Map<Character, IntegerFormula> p0 = new HashMap<>();
+            Map<Character, IntegerFormula> v0 = new HashMap<>();
 
-        Set<BigInteger> divs = new HashSet<>();
-        for (BigInteger i = BigInteger.ONE; i.compareTo(n) <= 0; i = i.add(BigInteger.ONE)) {
-            if (n.mod(i).equals(BigInteger.ZERO)) divs.add(i);
+            for (char axis : axes) {
+                p0.put(axis, manager.makeVariable("p0" + axis));
+                v0.put(axis, manager.makeVariable("v0" + axis));
+            }
+
+            for (int i = 1; i <=  lines.size(); i++) {
+                var line = lines.get(i - 1);
+                IntegerFormula t = manager.makeVariable("t" + i);
+                for (char axis : axes) {
+                    // p0 + tn*v0 = pn + tn*vn
+                    IntegerFormula pn = manager.makeNumber(line.pos().getComponent(axis));
+                    IntegerFormula vn = manager.makeNumber(line.slope().getComponent(axis));
+                    IntegerFormula lhs = manager.add(p0.get(axis), manager.multiply(t, v0.get(axis)));
+                    IntegerFormula rhs = manager.add(pn, manager.multiply(t, vn));
+                    BooleanFormula eq = manager.equal(lhs, rhs);
+                    prover.addConstraint(eq);
+                }
+            }
+
+
+            if (prover.isUnsat()) return "failed";
+
+            Model model = prover.getModel();
+            BigInteger sum = BigInteger.ZERO;
+            for (char axis : axes) sum = sum.add(model.evaluate(p0.get(axis)));
+
+            return sum.toString();
+
         }
-
-        List<BigInteger> list = new ArrayList<>(divs);
-        list.addAll(divs.stream().map(BigInteger::negate).toList());
-        list.sort(BigInteger::compareTo);
-
-        divisorsCache.put(n, list);
-
-        return list;
+        catch (InvalidConfigurationException | InterruptedException | SolverException exception) {
+            return "Error: " + exception;
+        }
 
     }
 
@@ -98,10 +131,6 @@ public class Day24 extends DaySolver {
     }
 
     record Line(int id, R3I pos, R3I slope) {
-
-        public R3I atTime(BigInteger t) {
-            return pos.add(slope.mul(t));
-        }
 
         public boolean contains(R3I p) {
             BigInteger m = p.x().subtract(pos.x()).divide(slope.x());
@@ -125,45 +154,10 @@ public class Day24 extends DaySolver {
 
     }
 
-    record R3D(BigDecimal x, BigDecimal y, BigDecimal z) {
-
-        public boolean equals(R3D other) {
-            BigDecimal err = new BigDecimal("0.01");
-            return x.subtract(other.x).abs().compareTo(err) < 0
-                    && y.subtract(other.y).abs().compareTo(err) < 0
-                    && z.subtract(other.z).abs().compareTo(err) < 0;
-        }
-
-        public R3D add(R3D other) {
-            return new R3D(
-                    x.add(other.x),
-                    y.add(other.y),
-                    z.add(other.z)
-            );
-        }
-
-        public R3D mul(BigDecimal c) {
-            return new R3D(
-                    x.multiply(c),
-                    y.multiply(c),
-                    z.multiply(c)
-            );
-        }
-
-        public String toString() {
-            return "(" + x + ", " + y + ", " + z + ")";
-        }
-
-    }
-
     record R3I(BigInteger x, BigInteger y, BigInteger z) {
 
         public boolean equals(R3I other) {
             return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
-        }
-
-        public boolean isZero() {
-            return x.equals(BigInteger.ZERO) && y.equals(BigInteger.ZERO) && z.equals(BigInteger.ZERO);
         }
 
         public R3I add(R3I other) {
@@ -171,14 +165,6 @@ public class Day24 extends DaySolver {
                     x.add(other.x),
                     y.add(other.y),
                     z.add(other.z)
-            );
-        }
-
-        public R3I sub(R3I other) {
-            return new R3I(
-                    x.subtract(other.x),
-                    y.subtract(other.y),
-                    z.subtract(other.z)
             );
         }
 
@@ -190,27 +176,14 @@ public class Day24 extends DaySolver {
             );
         }
 
-        public R3I div(BigInteger c) {
-            return new R3I(
-                    x.divide(c),
-                    y.divide(c),
-                    z.divide(c)
-            );
+        public BigInteger getComponent(char name) {
+            return switch (name) {
+                case 'x' -> x;
+                case 'y' -> y;
+                case 'z' -> z;
+                default -> throw new RuntimeException();
+            };
         }
-
-        public BigInteger dot(R3I other) {
-            return x.multiply(other.x).add(y.multiply(other.y)).add(z.multiply(other.z));
-        }
-
-        public R3I cross(R3I other) {
-            // Applying the cross product formula
-            BigInteger cx = y.multiply(other.z).subtract(z.multiply(other.y));
-            BigInteger cy = z.multiply(other.x).subtract(x.multiply(other.z));
-            BigInteger cz = x.multiply(other.y).subtract(y.multiply(other.x));
-
-            return new R3I(cx, cy, cz);
-        }
-
 
         public String toString() {
             return "(" + x + ", " + y + ", " + z + ")";

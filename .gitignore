@@ -12,6 +12,7 @@ target/
 */csharp/bin/
 */csharp/obj/
 .vscode/
+2023/jars/
 
 */x86asm/*
 !*/x86asm/*.*
