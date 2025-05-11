@@ -22,7 +22,7 @@ public class Day24 extends DaySolver {
         int id = 0;
         for (String line : getPuzzleInputLines()) {
             BigInteger[] nums = Arrays.stream(line.replaceAll(" {2}", " ")
-                    .replace(" @ ", ", ").split(", "))
+                            .replace(" @ ", ", ").split(", "))
                     .map(BigInteger::new).toArray(BigInteger[]::new);
             lines.add(new Line(id, new R3I(nums[0], nums[1], nums[2]), new R3I(nums[3], nums[4], nums[5])));
             id++;
@@ -45,10 +45,10 @@ public class Day24 extends DaySolver {
                 R2BD x = l1.projIntersection(l2);
                 if (
                         x != null
-                        && x.x().compareTo(minXY) > 0 && x.y().compareTo(minXY) > 0
-                        && x.x().compareTo(maxXY) < 0 && x.y().compareTo(maxXY) < 0
-                        && sign(x.x().subtract(new BigDecimal(p1.x()))) == sign(v1.x())
-                        && sign(x.x().subtract(new BigDecimal(p2.x()))) == sign(v2.x())
+                                && x.x().compareTo(minXY) > 0 && x.y().compareTo(minXY) > 0
+                                && x.x().compareTo(maxXY) < 0 && x.y().compareTo(maxXY) < 0
+                                && sign(x.x().subtract(new BigDecimal(p1.x()))) == sign(v1.x())
+                                && sign(x.x().subtract(new BigDecimal(p2.x()))) == sign(v2.x())
                 ) crosses++;
             }
         }
@@ -60,6 +60,26 @@ public class Day24 extends DaySolver {
     public String solvePart2() {
 
         return "";
+
+    }
+
+    Map<BigInteger, List<BigInteger>> divisorsCache = new HashMap<>();
+    private List<BigInteger> getDivisors(BigInteger n) {
+
+        if (divisorsCache.containsKey(n)) return divisorsCache.get(n);
+
+        Set<BigInteger> divs = new HashSet<>();
+        for (BigInteger i = BigInteger.ONE; i.compareTo(n) <= 0; i = i.add(BigInteger.ONE)) {
+            if (n.mod(i).equals(BigInteger.ZERO)) divs.add(i);
+        }
+
+        List<BigInteger> list = new ArrayList<>(divs);
+        list.addAll(divs.stream().map(BigInteger::negate).toList());
+        list.sort(BigInteger::compareTo);
+
+        divisorsCache.put(n, list);
+
+        return list;
 
     }
 
@@ -79,6 +99,15 @@ public class Day24 extends DaySolver {
 
     record Line(int id, R3I pos, R3I slope) {
 
+        public R3I atTime(BigInteger t) {
+            return pos.add(slope.mul(t));
+        }
+
+        public boolean contains(R3I p) {
+            BigInteger m = p.x().subtract(pos.x()).divide(slope.x());
+            return pos.add(slope.mul(m)).equals(p);
+        }
+
         public R2BD projIntersection(Line other) {
 
             R2BI p1 = new R2BI(pos.x, pos.y), p2 = new R2BI(other.pos.x, other.pos.y);
@@ -96,10 +125,45 @@ public class Day24 extends DaySolver {
 
     }
 
+    record R3D(BigDecimal x, BigDecimal y, BigDecimal z) {
+
+        public boolean equals(R3D other) {
+            BigDecimal err = new BigDecimal("0.01");
+            return x.subtract(other.x).abs().compareTo(err) < 0
+                    && y.subtract(other.y).abs().compareTo(err) < 0
+                    && z.subtract(other.z).abs().compareTo(err) < 0;
+        }
+
+        public R3D add(R3D other) {
+            return new R3D(
+                    x.add(other.x),
+                    y.add(other.y),
+                    z.add(other.z)
+            );
+        }
+
+        public R3D mul(BigDecimal c) {
+            return new R3D(
+                    x.multiply(c),
+                    y.multiply(c),
+                    z.multiply(c)
+            );
+        }
+
+        public String toString() {
+            return "(" + x + ", " + y + ", " + z + ")";
+        }
+
+    }
+
     record R3I(BigInteger x, BigInteger y, BigInteger z) {
 
         public boolean equals(R3I other) {
             return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
+        }
+
+        public boolean isZero() {
+            return x.equals(BigInteger.ZERO) && y.equals(BigInteger.ZERO) && z.equals(BigInteger.ZERO);
         }
 
         public R3I add(R3I other) {
@@ -137,6 +201,16 @@ public class Day24 extends DaySolver {
         public BigInteger dot(R3I other) {
             return x.multiply(other.x).add(y.multiply(other.y)).add(z.multiply(other.z));
         }
+
+        public R3I cross(R3I other) {
+            // Applying the cross product formula
+            BigInteger cx = y.multiply(other.z).subtract(z.multiply(other.y));
+            BigInteger cy = z.multiply(other.x).subtract(x.multiply(other.z));
+            BigInteger cz = x.multiply(other.y).subtract(y.multiply(other.x));
+
+            return new R3I(cx, cy, cz);
+        }
+
 
         public String toString() {
             return "(" + x + ", " + y + ", " + z + ")";
