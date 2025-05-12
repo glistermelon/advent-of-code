@@ -10,6 +10,16 @@ class Solver
     return @input
   end
 
+  def get_input_lines
+
+    return enum_for(:get_input_lines) unless block_given?
+
+    @input.each_line do |line|
+      yield line.strip
+    end
+
+  end
+
   def init_shared
   end
 

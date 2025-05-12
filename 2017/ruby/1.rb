@@ -1,5 +1,4 @@
 require_relative "solver"
-require_relative "util"
 
 class Day1 < Solver
     
