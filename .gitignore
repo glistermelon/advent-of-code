@@ -19,3 +19,5 @@ target/
 
 .env
 build/
+
+Gemfile.lock
