@@ -1,0 +1,18 @@
+Style/Documentation:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false

@@ -10,6 +10,8 @@ class Solver
     return @input
   end
 
+  # @yieldparam [String]
+  # @return [Enumerator::Yielder<String>]
   def get_input_lines
 
     return enum_for(:get_input_lines) unless block_given?
