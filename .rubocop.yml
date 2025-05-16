@@ -16,3 +16,7 @@ Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+Style/EvalWithLocation:
+  Enabled: false
+Security/Eval:
+  Enabled: false
