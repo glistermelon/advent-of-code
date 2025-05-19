@@ -2,9 +2,12 @@ require_relative 'solver'
 
 class Wall < Struct.new(:depth, :range, :scanner)
 
+  attr_reader :period
+
   def initialize(depth, range, scanner = 0)
     super depth, range, scanner
     @forward = true
+    @period = 2 * range - 2
   end
 
   def reset
@@ -12,7 +15,7 @@ class Wall < Struct.new(:depth, :range, :scanner)
   end
 
   def step(steps)
-    steps %= 2 * range - 2
+    steps %= @period
     (1..steps).each do
       if @forward
         self.scanner += 1
@@ -49,6 +52,17 @@ class Day13 < Solver
     end
 
     severity
+
+  end
+  
+  def solve_part_2
+
+    # brute force
+    period = @firewall.map(&:period).reduce(:lcm)
+    tests = @firewall.map { |w| [w.period, (-w.depth) % w.period] }.to_a
+    (1..period).each do |n|
+      return n if tests.map { |t| n % t[0] != t[1] }.all?
+    end
 
   end
 
