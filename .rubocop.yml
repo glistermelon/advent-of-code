@@ -20,3 +20,5 @@ Style/EvalWithLocation:
   Enabled: false
 Security/Eval:
   Enabled: false
+AllCops:
+  TargetRubyVersion: 3.4.3
