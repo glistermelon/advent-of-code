@@ -2,8 +2,10 @@ require_relative "util"
 
 class Solver
 
-  def initialize(day)
-    @input = Util.get_input(day).strip
+  def initialize(day, strip_input = true)
+    @input = Util.get_input(day)
+    @input.strip! if strip_input
+    @strip_input = strip_input
   end
 
   def get_input
@@ -17,7 +19,7 @@ class Solver
     return enum_for(:get_input_lines) unless block_given?
 
     @input.each_line do |line|
-      yield line.strip
+      yield @strip_input ? line.strip : line
     end
 
   end

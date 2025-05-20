@@ -1,6 +1,6 @@
-require_relative '18'
+require_relative '19'
 
-solver = Day18.new(18)
+solver = Day19.new(19)
 
 solver.init_shared
 puts solver.solve_part_1
