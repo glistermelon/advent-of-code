@@ -31,6 +31,10 @@ class Dir
     Dir.new((@num - 1) % 4)
   end
 
+  def reverse
+    Dir.new((@num + 2) % 4)
+  end
+
 end
 
 class Day19 < Solver
