@@ -20,5 +20,11 @@ Style/EvalWithLocation:
   Enabled: false
 Security/Eval:
   Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
 AllCops:
   TargetRubyVersion: 3.4
