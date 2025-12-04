@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cstring>
+#include <optional>
 
 template <class T>
 class Array2D {
+
+protected:
 
     T* arr;
     size_t w;
@@ -79,6 +82,14 @@ public:
 
     T* end() {
         return arr + w * h;
+    }
+
+    size_t height() {
+        return h;
+    }
+
+    size_t width() {
+        return w;
     }
 
 };
