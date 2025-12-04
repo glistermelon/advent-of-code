@@ -35,6 +35,9 @@ inline std::string get_puzzle_input(int day) {
     buffer << file.rdbuf();
     std::string str = buffer.str();
     str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
+    while (str.ends_with('\n')) {
+        str.pop_back();
+    }
     return str;
 
 }
