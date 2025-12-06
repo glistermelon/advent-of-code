@@ -5,12 +5,23 @@
 #include <sstream>
 #include <functional>
 
-std::vector<std::string> split(std::string s, char delim) {
+inline bool is_blank(std::string s) {
+    for (char c : s) {
+        if (c != ' ' || c != '\n' || c != '\r') {
+            return false;
+        }
+    }
+    return true;
+}
+
+std::vector<std::string> split(std::string s, char delim, bool remove_blank = true) {
     std::vector<std::string> parts;
     std::istringstream ss(s);
     std::string part;
     while (std::getline(ss, part, delim)) {
-        parts.push_back(part);
+        if (!(remove_blank && is_blank(part))) {
+            parts.push_back(part);
+        }
     }
     return parts;
 }
