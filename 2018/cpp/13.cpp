@@ -1,6 +1,3 @@
-
-
-
 #include "DaySolver.hpp"
 
 #include "Array2D.hpp"

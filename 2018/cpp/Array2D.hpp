@@ -61,6 +61,10 @@ public:
         return reinterpret_cast<T*>(arr + w * y);
     }
 
+    const T* operator[](size_t y) const {
+        return reinterpret_cast<const T*>(arr + w * y);
+    }
+
     Array2D<T>& operator=(const Array2D<T>& other) {
         arr = other.arr;
         w = other.w;
