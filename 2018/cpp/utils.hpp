@@ -26,6 +26,20 @@ std::vector<std::string> split(std::string s, char delim, bool remove_blank = tr
     return parts;
 }
 
+std::vector<std::string> split(std::string s, std::string delim, bool remove_blank = true) {
+    std::vector<std::string> parts;
+    while (!s.empty()) {
+        auto i = s.find(delim);
+        if (i == std::string::npos) {
+            parts.push_back(s);
+            break;
+        }
+        parts.push_back(s.substr(0, i));
+        s.erase(s.begin(), s.begin() + i + delim.length());
+    }
+    return parts;
+}
+
 template <class To, class From, class Func>
 auto map_to(const std::vector<From>& vec, Func func) {
     std::vector<To> result(vec.size());
