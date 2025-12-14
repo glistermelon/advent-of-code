@@ -1,0 +1,36 @@
+ISP += 16
+R5 = 1
+R2 = 1
+R1 = R2 * R5
+R1 = R1 == R4
+ISP += R1
+ISP++
+R0 += R5
+R2++
+R1 = R2 > R4
+ISP += R1
+ISP = 2
+R5++
+R1 = R5 > R4
+ISP += R1
+ISP = 1
+ISP *= ISP
+R4 += 2
+R4 *= R4
+R4 *= ISP
+R4 *= 11
+R1 += 6
+R1 *= ISP
+R1 += 10
+R4 += R1
+ISP += R0
+ISP = 0
+R1 = ISP
+R1 *= ISP
+R1 += ISP
+R1 *= ISP
+R1 *= 14
+R1 *= ISP
+R4 += R1
+R0 = 0
+ISP = 0

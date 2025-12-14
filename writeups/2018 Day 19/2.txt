@@ -1,0 +1,36 @@
+goto L18
+L2: R5 = 1
+L3: R2 = 1
+L4: R1 = R2 * R5
+R1 = R1 == R4
+if (R1 == R4) goto L8
+goto L9
+L8: R0 += R5
+L9: R2++
+R1 = R2 > R4
+if (R2 > R4) goto L13
+goto L4
+L13: R5++
+R1 = R5 > R4
+if (R5 > R4) exit
+goto L3
+
+L18: R4 += 2
+R4 *= R4
+R4 *= 19
+R4 *= 11
+R1 += 6
+R1 *= 22
+R1 += 10
+R4 += R1
+ISP += R0
+goto L2
+R1 = 27
+R1 *= 28
+R1 += 29
+R1 *= 30
+R1 *= 14
+R1 *= 32
+R4 += R1
+R0 = 0
+goto L2

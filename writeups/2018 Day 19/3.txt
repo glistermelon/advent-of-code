@@ -1,0 +1,22 @@
+if (R0 == 0) {
+    R1 = 142
+    R4 = 978
+}
+else {
+    R1 = R4 = 10551378
+}
+R5 = 1
+L3: R2 = 1
+L4: R1 = R2 * R5
+R1 = R1 == R4
+if (R1 == R4) goto L8
+goto L9
+L8: R0 += R5
+L9: R2++
+R1 = R2 > R4
+if (R2 > R4) goto L13
+goto L4
+L13: R5++
+R1 = R5 > R4
+if (R5 > R4) exit
+goto L3
